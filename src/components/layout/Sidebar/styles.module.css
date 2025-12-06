@@ -1,0 +1,131 @@
+/* Logo styles */
+.logo {
+    height: 48px;
+    margin: 16px;
+    background: var(--ant-primary-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.logoText {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Sidebar fijo */
+:global(.ant-layout-sider) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    z-index: 100;
+    overflow: hidden;
+}
+
+/* Menu con scroll delgado */
+:global(.ant-menu) {
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Scrollbar delgado personalizado */
+:global(.ant-menu::-webkit-scrollbar) {
+    width: 4px;
+}
+
+:global(.ant-menu::-webkit-scrollbar-track) {
+    background: transparent;
+}
+
+:global(.ant-menu::-webkit-scrollbar-thumb) {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+:global(.ant-menu::-webkit-scrollbar-thumb:hover) {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Firefox scrollbar delgado */
+:global(.ant-menu) {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Backdrop oscuro cuando el sidebar está abierto en móvil */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 999;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Estilos para el sidebar en móvil */
+.sidebarMobile {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    transition: left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebarMobileOpen {
+    left: 0;
+}
+
+/* Asegurar que el sidebar no afecte el layout en móvil */
+@media (max-width: 768px) {
+    :global(.ant-layout-has-sider) {
+        flex-direction: column;
+    }
+
+    :global(.ant-layout-sider) {
+        flex: 0 0 0;
+        max-width: none;
+        min-width: 0;
+        width: 0;
+    }
+
+    .sidebarMobile {
+        width: 280px;
+    }
+
+    .sidebarMobileOpen {
+        width: 280px;
+    }
+
+    /* Ocultar el trigger de colapso de Ant Design en móvil */
+    :global(.ant-layout-sider-trigger) {
+        display: none;
+    }
+}
+
+/* Estilos para desktop - mantener comportamiento normal */
+@media (min-width: 769px) {
+    .sidebar {
+        position: relative;
+        left: auto;
+    }
+}
