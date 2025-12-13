@@ -54,8 +54,10 @@ apiClient.interceptors.response.use(
     async (error) => {
         const status = error.response?.status;
 
-        // Si el token expiró o no es válido (401/403)
-        if (status === 401 || status === 403) {
+        // Si el token expiró o no es válido (401 Unauthorized)
+        // Nota: 403 (Forbidden) significa que el usuario está autenticado pero no tiene permisos
+        // para ese recurso específico, por lo que NO debemos cerrar la sesión
+        if (status === 401) {
             console.log("🔴 Token expired or invalid, redirecting to login");
 
             // Limpiar cache del token
@@ -74,6 +76,8 @@ apiClient.interceptors.response.use(
             }
         }
 
+        // Para errores 403, simplemente rechazar el error para que la aplicación
+        // lo maneje mostrando un mensaje apropiado sin cerrar la sesión
         return Promise.reject(error);
     }
 );

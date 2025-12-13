@@ -133,7 +133,7 @@ export const AvailabilityManagerMVP = () => {
                 <Title level={4}>Excepciones configuradas</Title>
 
                 {!exceptions.length && (
-                    <Alert type="info" message="No hay excepciones registradas" />
+                    <Alert type="info" title="No hay excepciones registradas" />
                 )}
 
                 <Space orientation="vertical" style={{ width: "100%" }}>

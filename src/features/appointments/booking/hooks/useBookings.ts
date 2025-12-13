@@ -5,6 +5,7 @@ import { Booking, BookingApi } from "../types/booking.types";
 import { message } from "antd";
 import {
     createBookingApi,
+    createHistoricalBookingApi,
     deleteBookingApi,
     getBookingsApi,
     BookingFilters,
@@ -74,6 +75,31 @@ export const useBookings = () => {
         };
     };
 
+    const createHistoricalBooking = async (formData: Partial<BookingApi>): Promise<{
+        success: boolean;
+        newObject?: Booking;
+        errorFields?: Record<string, string[]>;
+        status?: number;
+    }> => {
+        const result = await createHistoricalBookingApi(formData);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            const details = result.details ? toCamelCase(result.details) : null;
+            return {
+                success: result.success,
+                errorFields: details,
+                status: result.status,
+            };
+        }
+        message.success(result.message);
+        return {
+            success: result.success,
+            newObject: result.data,
+            status: result.status,
+        };
+    };
+
     const updateBooking = async (id: number, formData: Partial<BookingApi>): Promise<{
         success: boolean;
         updatedObject?: Booking;
@@ -119,6 +145,7 @@ export const useBookings = () => {
         count,
         fetchBookings,
         createBooking,
+        createHistoricalBooking,
         updateBooking,
         deleteBooking,
         fetchFilteredBookings,

@@ -12,6 +12,7 @@ export const mapBusiness = (apiBusiness: BusinessApi): Business => ({
     logo: apiBusiness.logo,
     phone: apiBusiness.phone,
     timezone: apiBusiness.timezone,
+    slug: apiBusiness.slug,
     isActive: apiBusiness.is_active,
     owner: apiBusiness.owner,
     whatsappMonthlyLimit: apiBusiness.whatsapp_monthly_limit,

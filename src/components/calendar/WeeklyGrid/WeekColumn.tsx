@@ -1,5 +1,5 @@
 import { CalendarEvent, CalendarConfig } from "../types";
-import { calculateEventPosition } from "../utils";
+import { calculateEventPosition, calculateEventPositions } from "../utils";
 import { EventCard } from "../EventCard";
 
 interface WeekColumnProps {
@@ -44,8 +44,10 @@ export const WeekColumn = ({
             })}
 
             {/* Eventos posicionados absolutamente */}
-            {events.map((event) => {
+            {calculateEventPositions(events).map(({ event, columnIndex, totalColumns }) => {
                 const { top, height } = calculateEventPosition(event, config, PIXELS_PER_MINUTE);
+                const widthPercent = 100 / totalColumns;
+                const leftPercent = widthPercent * columnIndex;
 
                 return (
                     <div
@@ -54,8 +56,8 @@ export const WeekColumn = ({
                         style={{
                             top: `${top}px`,
                             height: `${height}px`,
-                            left: 0,
-                            right: 0,
+                            left: `${leftPercent}%`,
+                            width: `${widthPercent}%`,
                         }}
                     >
                         <EventCard event={event} onClick={onEventClick} />

@@ -2,8 +2,9 @@
 
 import dayjs from "dayjs";
 import { CalendarEvent, CalendarConfig } from "./types";
-import { generateTimeSlots, calculateEventPosition } from "./utils";
+import { generateTimeSlots, calculateEventPosition, calculateEventPositions } from "./utils";
 import { EventCard } from "./EventCard";
+import { CurrentTimeLine } from "./CurrentTimeLine";
 
 interface DailyGridProps {
     events: CalendarEvent[];
@@ -50,7 +51,7 @@ export const DailyGrid = ({
             </div>
 
             {/* Grid del día */}
-            <div className="flex bg-white">
+            <div className="flex bg-white relative">
                 {/* Columna de horas - sticky horizontal */}
                 <div className="w-16 md:w-20 flex-shrink-0 sticky left-0 z-10 bg-white border-r border-gray-200">
                     {timeSlots.map((slot, index) => (
@@ -79,12 +80,10 @@ export const DailyGrid = ({
                     ))}
 
                     {/* Eventos posicionados absolutamente */}
-                    {events.map((event) => {
-                        const { top, height } = calculateEventPosition(
-                            event,
-                            config,
-                            PIXELS_PER_MINUTE
-                        );
+                    {calculateEventPositions(events).map(({ event, columnIndex, totalColumns }) => {
+                        const { top, height } = calculateEventPosition(event, config, PIXELS_PER_MINUTE);
+                        const widthPercent = 100 / totalColumns;
+                        const leftPercent = widthPercent * columnIndex;
 
                         return (
                             <div
@@ -93,8 +92,8 @@ export const DailyGrid = ({
                                 style={{
                                     top: `${top}px`,
                                     height: `${height}px`,
-                                    left: 0,
-                                    right: 0,
+                                    left: `${leftPercent}%`,
+                                    width: `${widthPercent}%`,
                                 }}
                             >
                                 <EventCard event={event} onClick={onEventClick} />
@@ -102,6 +101,14 @@ export const DailyGrid = ({
                         );
                     })}
                 </div>
+
+                {/* Línea de tiempo actual que cruza todo el ancho (solo si es hoy) */}
+                {isToday && (
+                    <CurrentTimeLine
+                        pixelsPerMinute={PIXELS_PER_MINUTE}
+                        startHour={config.startHour}
+                    />
+                )}
             </div>
         </div>
     );

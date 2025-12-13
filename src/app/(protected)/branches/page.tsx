@@ -30,14 +30,14 @@ const BranchesPage = () => {
             description="Administra las sucursales de tu negocio"
             actions={
                 <Space wrap>
-                    <AddBranchModal onSuccess={() => setChanges((prev) => !prev)} />
+                    {/* <AddBranchModal onSuccess={() => setChanges((prev) => !prev)} /> */}
                 </Space>
             }
         >
             <Flex vertical gap={8}>
                 <Card>
-                    <BranchFilters onFiltersChange={handleFiltersChange} />
-                    <Divider size="middle" />
+                    {/* <BranchFilters onFiltersChange={handleFiltersChange} />
+                    <Divider size="middle" /> */}
                     <BranchesList
                         count={count}
                         page={page}

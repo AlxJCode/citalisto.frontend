@@ -84,7 +84,7 @@ export const BookingsList = ({
                             {record.serviceModel ? record.serviceModel.name : "-"}
                         </div>
                         <div>
-                            {record.serviceModel && record.serviceModel.price ? ` (S/. ${record.serviceModel.price})` : ""}
+                            {record?.price ? `(S/. ${record?.price})`: ""}
                         </div>
                     </div>
                 )

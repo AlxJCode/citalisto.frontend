@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Button, Space, Typography, Spin, Modal, Form, Segmented } from "antd";
+import { Button, Space, Typography, Spin, Modal, Form, Segmented, Select } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import dayjs from "@/lib/dayjs/config";
 import { DailyGrid } from "./DailyGrid";
@@ -13,6 +13,7 @@ import { BookingForm } from "@/features/appointments/booking/components/BookingF
 import { useBookings } from "@/features/appointments/booking/hooks/useBookings";
 import { Booking } from "@/features/appointments/booking/types/booking.types";
 import { setBackendErrors } from "@/lib/utils/form";
+import { useProfessionals } from "@/features/professionals/professional/hooks/useProfessionals";
 
 const { Title } = Typography;
 
@@ -25,13 +26,12 @@ const DEFAULT_CONFIG: CalendarConfig = {
 };
 
 const PIXELS_PER_MINUTE = 1.2;
-const START_HOUR = 8; // Auto-scroll a las 8am
 
 interface CalendarProps {
     professionalId?: number;
 }
 
-export const Calendar = ({ professionalId }: CalendarProps) => {
+export const Calendar = ({ professionalId: propProfessionalId }: CalendarProps) => {
     const [viewMode, setViewMode] = useState<ViewMode>("week");
     const [currentDate, setCurrentDate] = useState(dayjs());
     const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -39,9 +39,14 @@ export const Calendar = ({ professionalId }: CalendarProps) => {
     const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalLoading, setModalLoading] = useState(false);
+    const [selectedProfessional, setSelectedProfessional] = useState<number | null>(null);
     const [form] = Form.useForm();
     const { updateBooking } = useBookings();
+    const { professionals, fetchProfessionals, loading: professionalsLoading } = useProfessionals();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    // Determinar el professionalId a usar
+    const professionalId = propProfessionalId || selectedProfessional;
 
     // Fetch de citas
     const fetchBookings = async () => {
@@ -60,7 +65,9 @@ export const Calendar = ({ professionalId }: CalendarProps) => {
                 });
 
                 if (result.success) {
-                    const dayEvents = result.data.map(bookingToCalendarEvent);
+                    // Filtrar bookings cancelados
+                    const activeBookings = result.data.filter(booking => booking.status !== "cancelled");
+                    const dayEvents = activeBookings.map(bookingToCalendarEvent);
                     allEvents.push(...dayEvents);
                 }
             }
@@ -74,7 +81,9 @@ export const Calendar = ({ professionalId }: CalendarProps) => {
             });
 
             if (result.success) {
-                const calendarEvents = result.data.map(bookingToCalendarEvent);
+                // Filtrar bookings cancelados
+                const activeBookings = result.data.filter(booking => booking.status !== "cancelled");
+                const calendarEvents = activeBookings.map(bookingToCalendarEvent);
                 setEvents(calendarEvents);
             }
         }
@@ -82,14 +91,38 @@ export const Calendar = ({ professionalId }: CalendarProps) => {
         setLoading(false);
     };
 
+    // Cargar profesionales al montar el componente
     useEffect(() => {
-        fetchBookings();
+        if (!propProfessionalId) {
+            fetchProfessionals({ is_active: true });
+        }
+    }, [propProfessionalId, fetchProfessionals]);
+
+    // Seleccionar el primer profesional cuando se carguen
+    useEffect(() => {
+        if (!propProfessionalId && professionals.length > 0 && selectedProfessional === null) {
+            setSelectedProfessional(professionals[0].id!);
+        }
+    }, [professionals, propProfessionalId, selectedProfessional]);
+
+    // Fetch bookings solo cuando hay un profesional seleccionado
+    useEffect(() => {
+        if (professionalId) {
+            fetchBookings();
+        }
     }, [currentDate, professionalId, viewMode]);
 
-    // Auto-scroll a las 8am al cargar o cambiar fecha/vista
+    // Auto-scroll a la hora actual al cargar o cambiar fecha/vista
     useEffect(() => {
         if (scrollContainerRef.current) {
-            const scrollPosition = START_HOUR * 60 * PIXELS_PER_MINUTE;
+            const now = dayjs();
+            const currentHour = now.hour();
+            const currentMinutes = now.minute();
+
+            // Scroll a 1 hora antes de la hora actual para dar contexto
+            const scrollHour = Math.max(DEFAULT_CONFIG.startHour, currentHour - 1);
+            const scrollPosition = (scrollHour * 60) * PIXELS_PER_MINUTE;
+
             scrollContainerRef.current.scrollTop = scrollPosition;
         }
     }, [currentDate, viewMode]);
@@ -189,6 +222,25 @@ export const Calendar = ({ professionalId }: CalendarProps) => {
                         {getHeaderTitle()}
                     </Title>
                     <Space size="small" className="flex-wrap justify-center">
+                        {/* Selector de profesional (solo si no viene por props) */}
+                        {!propProfessionalId && (
+                            <Select
+                                size="small"
+                                placeholder="Seleccionar profesional"
+                                value={selectedProfessional}
+                                onChange={setSelectedProfessional}
+                                loading={professionalsLoading}
+                                style={{ minWidth: 180 }}
+                                showSearch
+                                optionFilterProp="children"
+                            >
+                                {professionals.map((prof) => (
+                                    <Select.Option key={prof.id} value={prof.id!}>
+                                        {prof.name} {prof.lastName}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        )}
                         <Segmented
                             size="small"
                             value={viewMode}

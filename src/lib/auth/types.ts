@@ -1,5 +1,6 @@
 // Auth types for session and tokens
 
+import { Business } from "@/features/organizations/business/types/business.types";
 import { CategoryApi } from "@/features/organizations/category/types/category.types";
 import { UserRole } from "@/features/users/user/types/user.api";
 
@@ -15,16 +16,7 @@ export interface SessionUser {
     role: UserRole;
     roleDisplay: string;
     business?: number | null;
-    businessModel?: {
-        id: number;
-        name: string;
-        category: number;
-        categoryModel: CategoryApi;
-        logo?: string | null;
-        phone?: string | null;
-        timezone: string;
-        owner: number;
-    } | null;
+    businessModel?: Business | null;
     profilePicture?: string | null;
     isActive: boolean;
     isStaff: boolean;

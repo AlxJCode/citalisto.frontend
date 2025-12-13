@@ -158,7 +158,7 @@ export const createProfessionalApi = async (
     formData: Partial<ProfessionalApi>
 ): Promise<CreateProfessionalResult> => {
     const res = await apiRequest<ProfessionalApi>(() =>
-        apiClient.post("/api/v1/professionals/professionals/", formData)
+        apiClient.post("/api/v1/professionals/professionals/create/", formData)
     );
 
     if (!res.success) {

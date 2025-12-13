@@ -196,7 +196,7 @@ export const AvailabilityMVP = () => {
                     <Alert
                         style={{ marginTop: 16 }}
                         type="info"
-                        message="No hay horarios disponibles en este día."
+                        title="No hay horarios disponibles en este día."
                         showIcon
                     />
                 )}

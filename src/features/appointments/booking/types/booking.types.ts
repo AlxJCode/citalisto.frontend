@@ -9,7 +9,7 @@ import { Service, ServiceApi } from "@/features/services-catalog/service/types/s
 import { BaseModel, BaseModelCamel } from "@/types/base";
 
 export type BookingStatus = "pending" | "confirmed" | "cancelled" | "completed";
-export type BookingSource = "business" |"customer" | "widget";
+export type BookingSource = "business" |"customer" | "widget" | "historical";
 
 export interface BookingApi extends BaseModel {
     business: number;
@@ -21,6 +21,7 @@ export interface BookingApi extends BaseModel {
     service: number;
     service_model?: ServiceApi | null;
     customer: number;
+    price?: number;
     customer_model?: CustomerApi | null;
     notify_by_whatsapp: boolean;
     notify_by_email: boolean;
@@ -41,6 +42,7 @@ export interface Booking extends BaseModelCamel {
     professional: number;
     professionalModel?: Professional | null;
     service: number;
+    price?: number;
     serviceModel?: Service | null;
     customer: number;
     customerModel?: Customer | null;

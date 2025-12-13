@@ -62,6 +62,7 @@ export const CustomerForm = ({
                         label="Email"
                         name="email"
                         rules={[
+                            { required: true, message: "El email es requerido" },
                             {
                                 type: "email",
                                 message: "Ingresa un email válido",

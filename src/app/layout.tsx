@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto, Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { LoaderProvider } from "@/providers/LoaderProvider";
 import { NavigationLoader } from "@/components/providers/NavigationLoader";

@@ -1,7 +1,9 @@
 "use client";
 
-import { Form, FormInstance, Input, InputNumber, Button, Space, Row, Col, Divider, Switch } from "antd";
+import { Form, FormInstance, Input, InputNumber, Button, Space, Row, Col, Divider, Switch, Select } from "antd";
 import { Service } from "../../types/service.types";
+import { useBranches } from "@/features/organizations/branch/hooks/useBranches";
+import { useEffect } from "react";
 
 interface ServiceFormProps {
     form: FormInstance;
@@ -18,6 +20,12 @@ export const ServiceForm = ({
     onCancel,
     mode = "create",
 }: ServiceFormProps) => {
+    const { branches, fetchBranches } = useBranches();
+
+    useEffect(() => {
+        fetchBranches({ is_active: true });
+    }, [fetchBranches]);
+
     return (
         <Form
             form={form}
@@ -41,6 +49,30 @@ export const ServiceForm = ({
             >
                 <Input placeholder="Ej: Limpieza dental, Consulta general" size="middle" />
             </Form.Item>
+
+            {mode === "create" && (
+                <div>
+                    <Form.Item
+                        label="Sucursal"
+                        name="branch"
+                        rules={[
+                            { required: true, message: "La sucursal es requerida" },
+                        ]}
+                    >
+                        <Select
+                            placeholder="Selecciona una sucursal"
+                            showSearch={{optionFilterProp: "children"}}
+                            size="middle"
+                        >
+                            {branches.map((branch) => (
+                                <Select.Option key={branch.id} value={branch.id!}>
+                                    {branch.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                </div>
+            )}
 
             <Form.Item label="Descripción" name="description">
                 <Input.TextArea

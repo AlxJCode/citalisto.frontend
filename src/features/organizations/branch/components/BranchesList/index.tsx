@@ -56,11 +56,10 @@ export const BranchesList = ({
             title: "Acciones",
             key: "actions",
             width: 120,
-            fixed: "right",
             render: (_, record) => (
                 <Space size="small">
                     <EditBranchModal branch={record} onSuccess={() => setChanges((prev) => !prev)} />
-                    <DeleteBranchModal branch={record} onSuccess={() => setChanges((prev) => !prev)} />
+                    {/* <DeleteBranchModal branch={record} onSuccess={() => setChanges((prev) => !prev)} /> */}
                 </Space>
             ),
         },

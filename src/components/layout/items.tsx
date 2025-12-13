@@ -7,6 +7,7 @@ import {
     ClockCircleOutlined,
     AppstoreOutlined,
     BarChartOutlined,
+    LinkOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import Link from "next/link";
@@ -40,6 +41,11 @@ export const items: MenuItem[] = [
         key: "bookings-list",
         label: <Link href="/bookings">Listado de Citas</Link>,
         icon: <ClockCircleOutlined />,
+    },
+    {
+        key: "bookings-public-links",
+        label: <Link href="/bookings/public-links">Generar links</Link>,
+        icon: <LinkOutlined />,
     },
 
     {

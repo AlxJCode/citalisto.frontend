@@ -78,10 +78,10 @@ export const ProfessionalsList = ({
                         professional={record}
                         onSuccess={() => setChanges((prev) => !prev)}
                     />
-                    <DeleteProfessionalModal
+                    {/* <DeleteProfessionalModal
                         professional={record}
                         onSuccess={() => setChanges((prev) => !prev)}
-                    />
+                    /> */}
                 </Space>
             ),
         },

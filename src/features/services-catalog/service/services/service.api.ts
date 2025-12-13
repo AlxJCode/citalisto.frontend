@@ -7,6 +7,7 @@ export const mapService = (apiService: ServiceApi): Service => ({
     id: apiService.id,
     isActive: apiService.is_active,
     business: apiService.business,
+    branch: apiService.branch,
     name: apiService.name,
     isPublic: apiService.is_public,
     description: apiService.description,
@@ -20,7 +21,7 @@ export const mapService = (apiService: ServiceApi): Service => ({
 
 // Mapper de Service (camelCase) a ServiceApi (snake_case)
 export const mapServiceToApi = (service: Partial<Service>): Partial<ServiceApi> => {
-    return {
+    const mapped: Partial<ServiceApi> = {
         name: service.name,
         description: service.description,
         price: service.price,
@@ -28,6 +29,13 @@ export const mapServiceToApi = (service: Partial<Service>): Partial<ServiceApi> 
         duration_minutes: service.durationMinutes,
         business: service.business,
     };
+
+    // Solo incluir branch si está presente (requerido solo al crear)
+    if (service.branch !== undefined) {
+        mapped.branch = service.branch;
+    }
+
+    return mapped;
 };
 
 export interface ServiceFilters {
@@ -154,7 +162,7 @@ export const createServiceApi = async (
     formData: Partial<ServiceApi>
 ): Promise<CreateServiceResult> => {
     const res = await apiRequest<ServiceApi>(() =>
-        apiClient.post("/api/v1/services-catalog/services/", formData)
+        apiClient.post("/api/v1/services-catalog/services/create/", formData)
     );
 
     if (!res.success) {

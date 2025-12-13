@@ -152,7 +152,7 @@ export const createAvailabilityExceptionApi = async (
     formData: Partial<ProfessionalAvailabilityExceptionApi>
 ): Promise<CreateAvailabilityExceptionResult> => {
     const res = await apiRequest<ProfessionalAvailabilityExceptionApi>(() =>
-        apiClient.post("/api/v1/schedules/availability-exceptions/", formData)
+        apiClient.post("/api/v1/schedules/availability-exceptions/create/", formData)
     );
 
     if (!res.success) {

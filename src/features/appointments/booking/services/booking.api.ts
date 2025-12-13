@@ -22,6 +22,7 @@ export const mapBooking = (apiBooking: BookingApi): Booking => ({
     notifyByEmail: apiBooking.notify_by_email,
     notifyByWhatsapp: apiBooking.notify_by_whatsapp,
     source: apiBooking.source,
+    price: apiBooking.price,
     service: apiBooking.service,
     serviceModel: apiBooking.service_model ? mapService(apiBooking.service_model) : null,
     customer: apiBooking.customer,
@@ -43,6 +44,7 @@ export const mapBookingToApi = (booking: Partial<Booking>): Partial<BookingApi> 
         branch: booking.branch,
         professional: booking.professional,
         service: booking.service,
+        price: booking.price,
         customer: booking.customer,
         date: booking.date,
         start_time: booking.startTime,
@@ -207,7 +209,31 @@ export const createBookingApi = async (
     formData: Partial<BookingApi>
 ): Promise<CreateBookingResult> => {
     const res = await apiRequest<BookingApi>(() =>
-        apiClient.post("/api/v1/appointments/bookings/", formData)
+        apiClient.post("/api/v1/appointments/bookings/create/", formData)
+    );
+
+    if (!res.success) {
+        return {
+            success: false,
+            message: res.message,
+            status: res.status,
+            details: res.details,
+        };
+    }
+
+    return {
+        success: true,
+        data: mapBooking(res.data!),
+        message: res.message,
+        status: res.status,
+    };
+};
+
+export const createHistoricalBookingApi = async (
+    formData: Partial<BookingApi>
+): Promise<CreateBookingResult> => {
+    const res = await apiRequest<BookingApi>(() =>
+        apiClient.post("/api/v1/appointments/bookings/historical/create/", formData)
     );
 
     if (!res.success) {

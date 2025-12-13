@@ -27,6 +27,7 @@ Logo.displayName = "Logo";
 const ROUTE_TO_MENU_KEY: Record<string, string> = {
     "/panel": "dashboard",
     "/bookings/calendar": "bookings",
+    "/bookings/public-links": "bookings-public-links",
     "/bookings": "bookings-list",
     "/professionals": "professionals-list",
     "/professionals/availabilities": "professionals-availability",

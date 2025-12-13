@@ -9,6 +9,7 @@ export interface BusinessApi extends BaseModel {
     logo: string | null;
     phone: string | null;
     timezone: string;
+    slug?: string | null;
     owner: number;
     whatsapp_monthly_limit: number;
     owner_model?: UserApi | null;
@@ -20,6 +21,7 @@ export interface Business extends BaseModelCamel {
     categoryModel?: Category | null;
     logo: string | null;
     phone: string | null;
+    slug?: string | null;
     timezone: string;
     owner: number;
     whatsappMonthlyLimit: number;

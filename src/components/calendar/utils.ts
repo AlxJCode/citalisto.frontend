@@ -60,16 +60,6 @@ export const bookingToCalendarEvent = (booking: Booking): CalendarEvent => {
     const start = `${booking.date}T${startTime}:00`;
     const end = `${booking.date}T${endTime}:00`;
 
-    console.log("Booking conversion:", {
-        bookingId: booking.id,
-        date: booking.date,
-        startTime: booking.startTime,
-        endTime: booking.endTime,
-        calculatedStart: start,
-        calculatedEnd: end,
-        duration: dayjs(end).diff(dayjs(start), "minute")
-    });
-
     return {
         id: booking.id,
         start,
@@ -111,4 +101,37 @@ export const getWeekDays = (date: dayjs.Dayjs): dayjs.Dayjs[] => {
     const monday = date.subtract(daysFromMonday, "day");
 
     return Array.from({ length: 7 }, (_, i) => monday.add(i, "day"));
+};
+
+export interface EventWithPosition {
+    event: CalendarEvent;
+    columnIndex: number;
+    totalColumns: number;
+}
+
+/**
+ * Calcula posiciones para eventos superpuestos (divide el ancho)
+ */
+export const calculateEventPositions = (events: CalendarEvent[]): EventWithPosition[] => {
+    const result: EventWithPosition[] = [];
+
+    events.forEach((event, index) => {
+        const eventStart = dayjs(event.start);
+        const eventEnd = dayjs(event.end);
+
+        // Encontrar todos los eventos que se superponen con este
+        const overlapping = events.filter((other, otherIndex) => {
+            if (index === otherIndex) return true;
+            const otherStart = dayjs(other.start);
+            const otherEnd = dayjs(other.end);
+            return eventStart.isBefore(otherEnd) && eventEnd.isAfter(otherStart);
+        });
+
+        const totalColumns = overlapping.length;
+        const columnIndex = overlapping.findIndex(e => e.id === event.id);
+
+        result.push({ event, columnIndex, totalColumns });
+    });
+
+    return result;
 };

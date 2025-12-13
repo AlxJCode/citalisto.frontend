@@ -10,7 +10,7 @@ import { mapCustomerToApi } from "../../services/customer.api";
 import { setBackendErrors } from "@/lib/utils/form";
 
 interface AddCustomerModalProps {
-    onSuccess?: () => void;
+    onSuccess?: (newCustomer?: Customer) => void;
 }
 
 export const AddCustomerModal = ({ onSuccess }: AddCustomerModalProps) => {
@@ -41,7 +41,7 @@ export const AddCustomerModal = ({ onSuccess }: AddCustomerModalProps) => {
         }
 
         handleClose();
-        onSuccess?.();
+        onSuccess?.(result.newObject);
     };
 
     return (

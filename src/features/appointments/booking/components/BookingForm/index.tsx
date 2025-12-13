@@ -1,6 +1,6 @@
 "use client";
 
-import { Form, FormInstance, Button, Space, Divider, Row, Col, Select, DatePicker, TimePicker, Input, Switch, Tag } from "antd";
+import { Form, FormInstance, Button, Space, Divider, Row, Col, Select, DatePicker, TimePicker, Input, InputNumber, Switch, Tag } from "antd";
 import { Booking } from "../../types/booking.types";
 import { useCustomers } from "@/features/customers/customer/hooks/useCustomers";
 import { useServices } from "@/features/services-catalog/service/hooks/useServices";
@@ -43,15 +43,23 @@ export const BookingForm = ({
         fetchServices({ is_active: true, name: debouncedSearchService });
     }, [fetchServices, debouncedSearchService]);
 
-    // Auto-calcular endTime cuando cambia startTime o service
+    // Auto-calcular endTime y price cuando cambia el service
     const handleServiceChange = (serviceId: number) => {
         setSelectedService(serviceId);
         const service = services.find((s) => s.id === serviceId);
         const startTime = form.getFieldValue("startTime");
 
-        if (service && startTime) {
-            const endTime = dayjs(startTime).add(service.durationMinutes, "minute");
-            form.setFieldsValue({ endTime });
+        if (service) {
+            // Auto-completar precio del servicio
+            if (service.price) {
+                form.setFieldsValue({ price: service.price });
+            }
+
+            // Auto-calcular endTime si hay startTime
+            if (startTime) {
+                const endTime = dayjs(startTime).add(service.durationMinutes, "minute");
+                form.setFieldsValue({ endTime });
+            }
         }
     };
 
@@ -124,6 +132,23 @@ export const BookingForm = ({
 
                 <Col xs={24} md={12}>
                     <Form.Item
+                        label="Precio"
+                        name="price"
+                        rules={[{ required: true, message: "Ingresa el precio" }]}
+                    >
+                        <InputNumber
+                            placeholder="Precio del servicio"
+                            style={{ width: "100%" }}
+                            size="middle"
+                            min={0}
+                            precision={2}
+                            prefix="S/."
+                        />
+                    </Form.Item>
+                </Col>
+
+                <Col xs={24} md={12}>
+                    <Form.Item
                         label="Profesional"
                         name="professional"
                         rules={[{ required: true, message: "Selecciona un profesional" }]}
@@ -149,15 +174,6 @@ export const BookingForm = ({
                         name="date"
                         rules={[
                             { required: true, message: "Selecciona una fecha" },
-                            {
-                                validator: (_, value) => {
-                                    if (!value) return Promise.resolve();
-                                    if (value.isBefore(dayjs(), "day")) {
-                                        return Promise.reject("No se pueden agendar citas en fechas pasadas");
-                                    }
-                                    return Promise.resolve();
-                                },
-                            },
                         ]}
                     >
                         <DatePicker
@@ -201,7 +217,6 @@ export const BookingForm = ({
                             placeholder="Calculado automáticamente"
                             format="HH:mm"
                             size="middle"
-                            disabled
                         />
                     </Form.Item>
                 </Col>
