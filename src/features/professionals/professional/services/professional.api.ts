@@ -33,6 +33,7 @@ export const mapProfessionalToApi = (professional: Partial<Professional>): Parti
         last_name: professional.lastName,
         business: professional.business,
         email: professional.email,
+        branch: professional.branch,
         phone: professional.phone,
         description: professional.description,
         services: professional.services,

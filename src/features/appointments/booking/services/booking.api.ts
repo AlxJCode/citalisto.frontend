@@ -131,6 +131,7 @@ export const filterBookingsApi = async (
     const res = await apiRequest<BookingApi[]>(() =>
         apiClient.post(`/api/v1/appointments/bookings/filter/${page ? `?page=${page}` : ``}`, filters)
     );
+    console.log("response booking", res);
 
     if (!res.success) {
         return {

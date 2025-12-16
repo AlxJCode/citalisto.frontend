@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Form, FormInstance, Input, Button, Space, Divider, Row, Col, Select } from "antd";
 import { Professional } from "../../types/professional.types";
 import { useServices } from "@/features/services-catalog/service/hooks/useServices";
+import { useBranches } from "@/features/organizations/branch/hooks/useBranches";
 
 interface ProfessionalFormProps {
     form: FormInstance;
@@ -21,9 +22,11 @@ export const ProfessionalForm = ({
     mode = "create",
 }: ProfessionalFormProps) => {
     const { services, loading: loadingServices, fetchServices } = useServices();
+    const { branches, loading: loadingBranches, fetchBranches } = useBranches();
 
     useEffect(() => {
         fetchServices({ is_active: true, per_page: 100 });
+        fetchBranches({ is_active: true, per_page: 100 });
     }, []);
 
     return (
@@ -105,6 +108,26 @@ export const ProfessionalForm = ({
             <Divider titlePlacement="left">Información Profesional</Divider>
 
             <Row gutter={16}>
+                <Col xs={24}>
+                    <Form.Item
+                        label="Sucursal"
+                        name="branch"
+                        rules={[
+                            { required: true, message: "La sucursal es requerida" },
+                        ]}
+                    >
+                        <Select
+                            placeholder="Selecciona una sucursal"
+                            size="middle"
+                            options={branches.map((branch) => ({
+                                label: branch.name,
+                                value: branch.id,
+                            }))}
+                            loading={loadingBranches}
+                        />
+                    </Form.Item>
+                </Col>
+
                 <Col xs={24}>
                     <Form.Item
                         label="Servicios"

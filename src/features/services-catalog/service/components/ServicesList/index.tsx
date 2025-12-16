@@ -13,6 +13,8 @@ interface ServicesListProps {
     setChanges: Dispatch<SetStateAction<boolean>>;
     setPage: Dispatch<SetStateAction<number>>;
     page: number;
+    pageSize: number;
+    setPageSize: Dispatch<SetStateAction<number>>;
     count: number;
 }
 
@@ -22,17 +24,21 @@ export const ServicesList = ({
     setChanges,
     setPage,
     page,
+    pageSize,
+    setPageSize,
     count,
 }: ServicesListProps) => {
+
     const handleSuccess = () => {
         setChanges((prev) => !prev);
     };
+
     const columns: TableColumnsType<Service> = [
         {
             title: "#",
             key: "index",
             width: 60,
-            render: (_, __, index) => (page - 1) * 10 + index + 1,
+            render: (_, __, index) => (page - 1) * pageSize + index + 1,
         },
         {
             title: "Nombre",
@@ -97,33 +103,21 @@ export const ServicesList = ({
             dataSource={dataSource}
             loading={loading}
             rowKey="id"
-            size="middle"
+            size="small"
             rowClassName={(record) => (!record.isActive ? "table-row-inactive" : "")}
             pagination={{
-                pageSize: 10,
+                pageSize: pageSize,
+                pageSizeOptions: [10, 20, 50, 100],
                 total: count,
                 current: page,
-                showSizeChanger: false,
-                onChange: (page) => setPage(page),
-                showTotal: (total, range) => (
-                    <span style={{ flex: "0 0 auto" }}>Total: {total} servicios</span>
-                ),
-                /* style: {
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "0px",
-                    width: "100%",
+                showSizeChanger: true,
+                onChange: (page, newPageSize) => {
+                    setPage(page);
+                    if (newPageSize !== pageSize) {
+                        setPageSize(newPageSize);
+                    }
                 },
-                itemRender: (page, type, originalElement) => {
-                    if (type === "prev") {
-                        return <Button size="small">Anterior</Button>;
-                    }
-                    if (type === "next") {
-                        return <Button size="small">Siguiente</Button>;
-                    }
-                    return originalElement;
-                }, */
+                showTotal: (total) => `Total: ${total} servicios`,
             }}
             scroll={{ x: 800 }}
         />

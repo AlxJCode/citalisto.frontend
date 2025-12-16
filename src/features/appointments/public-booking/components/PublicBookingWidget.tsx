@@ -198,7 +198,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
     const handleServiceChange = (serviceId: string) => {
         const service = selectedProfessional?.services.find((s) => s.id === serviceId);
         setSelectedService(service || null);
-        setSelectedDate(null);
+        setSelectedDate(dayjs());
         setAvailableSlots([]);
         setSelectedSlot(null);
     };
@@ -288,7 +288,6 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
                 background: "linear-gradient(135deg, var(--ant-primary-color) 0%, var(--ant-primary-color) 100%)",
                 padding: "clamp(20px, 4vw, 32px)",
                 borderRadius: "12px 12px 0 0",
-                marginBottom: 24,
             }}
         >
             <Row justify="space-between" align="top" gutter={[16, 16]}>
@@ -439,7 +438,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
                 <Row gutter={[24, 24]}>
                     {/* Left Column - Compact Calendar + Service Selector */}
                     <Col xs={24} lg={10}>
-                        <Space direction="vertical" size="middle" style={{ width: "100%", position: "sticky", top: 80 }}>
+                        <Space orientation="vertical" size="middle" style={{ width: "100%", position: "sticky", top: 80 }}>
                             {/* Service Selection */}
                             <div>
                                 <Text strong style={{ display: "block", marginBottom: 12, fontSize: 16 }}>
@@ -484,7 +483,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
                                 </Text>
                                 {!selectedService && (
                                     <Alert
-                                        message="Selecciona un servicio primero"
+                                        title="Selecciona un servicio primero"
                                         type="info"
                                         showIcon
                                         style={{ marginBottom: 12 }}
@@ -544,7 +543,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
 
                     {/* Right Column - Timeline Slots + Inline Form */}
                     <Col xs={24} lg={14}>
-                        <Space direction="vertical" size="large" style={{ width: "100%" }}>
+                        <Space orientation="vertical" size="large" style={{ width: "100%" }}>
                             {/* Time Slots Timeline */}
                             {selectedService && selectedDate && (
                                 <div ref={timeRef}>
@@ -900,7 +899,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
                 {renderHeader()}
 
                 {/* Main Content */}
-                <div style={{ padding: "clamp(20px, 4vw, 32px)" }}>
+                <div style={{ padding: "clamp(0, 4vw, 32px)" }}>
                     {bookingSuccess ? renderConfirmationStep() : renderBookingForm()}
                 </div>
             </Card>

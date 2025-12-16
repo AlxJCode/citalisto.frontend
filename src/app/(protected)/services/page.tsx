@@ -10,13 +10,14 @@ import { useEffect, useState } from "react";
 
 const ServicesPage = () => {
     const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(20);
     const [changes, setChanges] = useState(false);
     const [filters, setFilters] = useState({ name: "", is_active: true });
     const { loading, services, count, fetchServices } = useServices();
 
     useEffect(() => {
-        fetchServices({ page, ...filters });
-    }, [page, changes, filters]);
+        fetchServices({ page, per_page: pageSize, ...filters });
+    }, [page, pageSize, changes, filters]);
 
     const handleFiltersChange = (name: string, status: "active" | "inactive") => {
         setFilters({ name, is_active: status === "active" });
@@ -41,6 +42,8 @@ const ServicesPage = () => {
                         count={count}
                         page={page}
                         setPage={setPage}
+                        pageSize={pageSize}
+                        setPageSize={setPageSize}
                         setChanges={setChanges}
                         loading={loading}
                         dataSource={services}

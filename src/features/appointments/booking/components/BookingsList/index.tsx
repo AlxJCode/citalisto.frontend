@@ -12,7 +12,7 @@ import { updateBookingApi } from "../../services/booking.api";
 interface BookingsListProps {
     dataSource: Booking[];
     loading: boolean;
-    setChanges: Dispatch<SetStateAction<boolean>>;
+    onRefetch: () => void;
     setPage: Dispatch<SetStateAction<number>>;
     page: number;
     count: number;
@@ -35,7 +35,7 @@ const statusLabels = {
 export const BookingsList = ({
     dataSource,
     loading,
-    setChanges,
+    onRefetch,
     setPage,
     page,
     count,
@@ -126,7 +126,7 @@ export const BookingsList = ({
                         const result = await updateBookingApi(record.id, { status: newStatus });
                         if (result.success) {
                             message.success('Estado actualizado');
-                            setChanges((prev) => !prev);
+                            onRefetch();
                         } else {
                             message.error('Error al actualizar');
                         }
@@ -150,11 +150,11 @@ export const BookingsList = ({
                 <Space size="small">
                     <EditBookingModal
                         booking={record}
-                        onSuccess={() => setChanges((prev) => !prev)}
+                        onSuccess={onRefetch}
                     />
                     {/* <DeleteBookingModal
                         booking={record}
-                        onSuccess={() => setChanges((prev) => !prev)}
+                        onSuccess={onRefetch}
                     /> */}
                 </Space>
             ),

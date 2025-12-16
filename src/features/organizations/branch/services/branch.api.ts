@@ -28,6 +28,7 @@ export const mapBranchToApi = (branch: Partial<Branch>): Partial<BranchApi> => {
 
 export interface BranchFiltersProps {
     page?: number;
+    per_page?: number;
     is_active?: boolean;
     name?: string;
     business?: number;
@@ -55,6 +56,7 @@ export const getBranchesApi = async (
 ): Promise<GetBranchesResult> => {
     const params = new URLSearchParams();
     if (filters?.page) params.append("page", filters.page.toString());
+    if (filters?.per_page) params.append("per_page", filters.per_page.toString());
     if (filters?.name) params.append("name__icontains", filters.name);
     if (filters?.business) params.append("business", filters.business.toString());
     if (filters?.is_active !== undefined)

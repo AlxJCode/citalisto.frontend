@@ -34,7 +34,7 @@ export const useBookings = () => {
         setLoading(false);
     }, []);
 
-    const fetchFilteredBookings = useCallback(async (filters: Record<string, any>, page?: number) => {
+    const fetchFilteredBookings = useCallback(async (filters: Record<string, any>, page: number = 1) => {
         setLoading(true);
         const result = await filterBookingsApi(filters, page);
 
