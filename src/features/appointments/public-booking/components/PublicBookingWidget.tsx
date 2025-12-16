@@ -54,7 +54,6 @@ interface PublicBookingWidgetProps {
 type ValidationState = "loading" | "valid" | "invalid" | "missing_params";
 
 export function PublicBookingWidget({ businessSlug, queryParams }: PublicBookingWidgetProps) {
-    const [form] = Form.useForm();
     const { loading, getProfessionals, getAvailability, createBooking, getBranches } =
         usePublicBooking(businessSlug);
 
@@ -82,19 +81,6 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
     useEffect(() => {
         validateAndLoadInitialData();
     }, []);
-
-    // Load saved user data from localStorage
-    useEffect(() => {
-        const savedData = localStorage.getItem("citalisto_user_data");
-        if (savedData) {
-            try {
-                const parsed = JSON.parse(savedData);
-                form.setFieldsValue(parsed);
-            } catch (error) {
-                console.error("Error loading saved data:", error);
-            }
-        }
-    }, [form]);
 
     // Auto-scroll to next section when previous is completed
     useEffect(() => {
@@ -434,8 +420,8 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
             <>
                 {/* Sticky Summary Bar */}
                 {renderSummaryBar()}
-
-                <Row gutter={[24, 24]}>
+ 
+                <Row gutter={[24, 24]} style={{padding: "0.5rem 1.5rem"}}>
                     {/* Left Column - Compact Calendar + Service Selector */}
                     <Col xs={24} lg={10}>
                         <Space orientation="vertical" size="middle" style={{ width: "100%", position: "sticky", top: 80 }}>
@@ -647,7 +633,22 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
                                         Completa tus datos
                                     </Text>
 
-                                    <Form form={form} layout="vertical" onFinish={handleSubmit} size="large">
+                                    <Form
+                                        layout="vertical"
+                                        onFinish={handleSubmit}
+                                        size="large"
+                                        initialValues={(() => {
+                                            const savedData = localStorage.getItem("citalisto_user_data");
+                                            if (savedData) {
+                                                try {
+                                                    return JSON.parse(savedData);
+                                                } catch {
+                                                    return {};
+                                                }
+                                            }
+                                            return {};
+                                        })()}
+                                    >
                                         <Row gutter={16}>
                                             <Col xs={24} sm={12}>
                                                 <Form.Item
@@ -707,7 +708,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
 
     // Confirmation view
     const renderConfirmationStep = () => (
-        <div style={{ maxWidth: 600, margin: "0 auto", padding: "0 16px", textAlign: "center" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", padding: "1.5rem", textAlign: "center" }}>
             <CheckCircleOutlined style={{ fontSize: 64, color: "#52c41a", marginBottom: 24 }} />
             <Title level={2} style={{ fontSize: "clamp(20px, 4vw, 28px)" }}>
                 ¡Reserva confirmada!

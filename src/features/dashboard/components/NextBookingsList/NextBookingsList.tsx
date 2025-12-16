@@ -24,6 +24,7 @@ const statusLabels: Record<NextBooking['status'], string> = {
 };
 
 export const NextBookingsList = ({ bookings }: NextBookingsListProps) => {
+
     const columns: ColumnsType<NextBooking> = [
         {
             title: 'Fecha y Hora',
@@ -32,7 +33,7 @@ export const NextBookingsList = ({ bookings }: NextBookingsListProps) => {
                 <div>
                     <div>{dayjs(record.date).format('DD/MM/YYYY')}</div>
                     <Text type="secondary" className="text-xs">
-                        {dayjs(record.startTime, 'HH:mm:ss').format('HH:mm')}
+                        {record.startTime.substring(0, 5)}
                     </Text>
                 </div>
             ),
