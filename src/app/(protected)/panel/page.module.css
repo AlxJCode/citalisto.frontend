@@ -1,0 +1,17 @@
+.dashboardCol {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboardCard {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.dashboardCard > :global(.ant-card-body) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}

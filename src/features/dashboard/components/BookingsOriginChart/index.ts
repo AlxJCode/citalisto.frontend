@@ -1,0 +1,1 @@
+export { BookingsOriginChart } from './BookingsOriginChart';

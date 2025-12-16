@@ -36,7 +36,7 @@ export const AvailabilityGuide = () => {
             >
                 <Space orientation="vertical" style={{ width: "100%" }} size="large">
                 <Collapse
-                    bordered={false}
+                    
                     style={{ background: "transparent" }}
                     items={[
                         {

@@ -119,7 +119,7 @@ export const PublicBookingView = ({ publicToken }: PublicBookingViewProps) => {
             <div className="max-w-2xl w-full py-8">
                 <Card
                     className="shadow-xl rounded-2xl"
-                    bordered={false}
+                    
                     style={{ borderRadius: "16px" }}
                 >
                     {/* Header */}
