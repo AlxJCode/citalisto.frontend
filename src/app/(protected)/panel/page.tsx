@@ -66,21 +66,21 @@ export default function PanelPage() {
         >
             <Row gutter={[16, 16]}>
                 {/* Stats Cards Row - 5 cards responsive */}
-                <Col xs={24} sm={12} lg={8} xl={4} xxl={4} className={styles.dashboardCol}>
+                <Col xs={24} sm={12} lg={8} xl={3} xxl={4} className={styles.dashboardCol}>
                     <StatCard
                         title="Citas Hoy"
                         value={data.agenda.today}
                         icon={<CalendarOutlined />}
                     />
                 </Col>
-                <Col xs={24} sm={12} lg={8} xl={4} xxl={4} className={styles.dashboardCol}>
+                <Col xs={24} sm={12} lg={8} xl={3} xxl={4} className={styles.dashboardCol}>
                     <StatCard
                         title="Próximas Citas"
                         value={data.agenda.upcoming}
                         icon={<ClockCircleOutlined />}
                     />
                 </Col>
-                <Col xs={24} sm={12} lg={8} xl={5} xxl={5} className={styles.dashboardCol}>
+                <Col xs={24} sm={12} lg={8} xl={7} xxl={5} className={styles.dashboardCol}>
                     <RevenueCard
                         monthly={data.revenue.monthly}
                         total={data.revenue.total}

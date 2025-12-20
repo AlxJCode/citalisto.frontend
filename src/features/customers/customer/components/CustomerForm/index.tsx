@@ -1,7 +1,8 @@
 "use client";
 
-import { Form, FormInstance, Input, Button, Space, Divider, Row, Col } from "antd";
+import { Form, FormInstance, Input, Button, Space, Divider, Row, Col, Select } from "antd";
 import { Customer } from "../../types/customer.types";
+import { useEffect } from "react";
 
 interface CustomerFormProps {
     form: FormInstance;
@@ -11,6 +12,8 @@ interface CustomerFormProps {
     mode?: "create" | "edit";
 }
 
+const COUNTRY_CODE = "+51";
+
 export const CustomerForm = ({
     form,
     onFinish,
@@ -18,11 +21,28 @@ export const CustomerForm = ({
     onCancel,
     mode = "create",
 }: CustomerFormProps) => {
+    // Separar el teléfono al cargar datos en modo edición
+    useEffect(() => {
+        const phoneValue = form.getFieldValue("phone");
+        console.log("phoneValue", phoneValue);
+        if (phoneValue && phoneValue.startsWith(COUNTRY_CODE)) {
+            const phoneNumber = phoneValue.replace(COUNTRY_CODE, "");
+            form.setFieldsValue({ phone: phoneNumber });
+        }
+    }, [form]);
+
+    // Al enviar, combinar código de país + número
+    const handleFinish = (values: Partial<Customer>) => {
+        const { phone, ...rest } = values;
+        const fullPhone = phone ? `${COUNTRY_CODE}${phone}` : "";
+        onFinish({ ...rest, phone: fullPhone });
+    };
+
     return (
         <Form
             form={form}
             layout="vertical"
-            onFinish={onFinish}
+            onFinish={handleFinish}
             disabled={loading}
             style={{ marginTop: 24 }}
         >
@@ -74,18 +94,33 @@ export const CustomerForm = ({
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Form.Item
-                        label="Teléfono"
-                        name="phone"
-                        rules={[
-                            { required: true, message: "El teléfono es requerido" },
-                            {
-                                pattern: /^[0-9]{9}$/,
-                                message: "El teléfono debe tener 9 dígitos",
-                            },
-                        ]}
-                    >
-                        <Input placeholder="Ej: 987654321" size="middle" maxLength={9} />
+                    <Form.Item label="Teléfono" required>
+                        <Space.Compact style={{ width: '100%' }}>
+                            <Select
+                                value={COUNTRY_CODE}
+                                disabled
+                                style={{ width: '80px' }}
+                                options={[{ label: "+51", value: "+51" }]}
+                            />
+                            <Form.Item
+                                name="phone"
+                                noStyle
+                                rules={[
+                                    { required: true, message: "El teléfono es requerido" },
+                                    {
+                                        pattern: /^[0-9]{9}$/,
+                                        message: "El teléfono debe tener 9 dígitos",
+                                    },
+                                ]}
+                            >
+                                <Input
+                                    placeholder="Ej: 987654321"
+                                    size="middle"
+                                    maxLength={9}
+                                    style={{ flex: 1 }}
+                                />
+                            </Form.Item>
+                        </Space.Compact>
                     </Form.Item>
                 </Col>
             </Row>

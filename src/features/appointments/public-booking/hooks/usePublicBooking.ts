@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { message } from "antd";
+import { notification } from "antd";
 import {
     getProfessionalsApi,
     getAvailabilityApi,
@@ -24,7 +24,12 @@ export const usePublicBooking = (businessSlug: string) => {
             const result = await getBranchessApi(businessSlug);
 
             if (!result.success) {
-                message.error(`E-${result.status} - ${result.message}`);
+                notification.error({
+                    message: "Error al cargar sucursales",
+                    description: `E-${result.status} - ${result.message}`,
+                    placement: "topRight",
+                    duration: 10,
+                });
             }
 
             return result;
@@ -39,7 +44,12 @@ export const usePublicBooking = (businessSlug: string) => {
             const result = await getProfessionalsApi(businessSlug, branchId);
 
             if (!result.success) {
-                message.error(`E-${result.status} - ${result.message}`);
+                notification.error({
+                    message: "Error al cargar profesionales",
+                    description: `E-${result.status} - ${result.message}`,
+                    placement: "topRight",
+                    duration: 10,
+                });
             }
 
             return result;
@@ -54,7 +64,12 @@ export const usePublicBooking = (businessSlug: string) => {
             const result = await getAvailabilityApi(businessSlug, professionalId, serviceId, date);
 
             if (!result.success) {
-                message.error(`E-${result.status} - ${result.message}`);
+                notification.error({
+                    message: "Error al cargar disponibilidad",
+                    description: `E-${result.status} - ${result.message}`,
+                    placement: "topRight",
+                    duration: 10,
+                });
             }
 
             return result;
@@ -69,11 +84,21 @@ export const usePublicBooking = (businessSlug: string) => {
             const result = await createPublicBookingApi(businessSlug, payload);
 
             if (!result.success) {
-                message.error(`E-${result.status} - ${result.message}`);
+                notification.error({
+                    message: "Error al crear la reserva",
+                    description: `E-${result.status} - ${result.message}`,
+                    placement: "topRight",
+                    duration: 10,
+                });
                 return result;
             }
 
-            message.success(result.message || "¡Reserva creada exitosamente!");
+            notification.success({
+                message: "¡Reserva creada exitosamente!",
+                description: result.message || "Tu cita ha sido confirmada.",
+                placement: "topRight",
+                duration: 10,
+            });
             return result;
         } finally {
             setLoading(false);

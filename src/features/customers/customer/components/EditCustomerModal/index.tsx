@@ -27,7 +27,8 @@ export const EditCustomerModal = ({
 
     useEffect(() => {
         if (customer && open) {
-            form.setFieldsValue(customer);
+            console.log("customer phone", customer.phone);
+            form.setFieldsValue({ ...customer, phone: customer?.phone });
         }
     }, [customer, open, form]);
 

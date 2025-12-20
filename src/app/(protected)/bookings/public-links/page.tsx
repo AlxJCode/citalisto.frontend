@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Card, Form, Select, Button, Input, Space, Row, Col, QRCode, message } from "antd";
-import { LinkOutlined, CopyOutlined, DownloadOutlined } from "@ant-design/icons";
+import { LinkOutlined, CopyOutlined, DownloadOutlined, ExportOutlined } from "@ant-design/icons";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { useBranches } from "@/features/organizations/branch/hooks/useBranches";
 import { useProfessionals } from "@/features/professionals/professional/hooks/useProfessionals";
@@ -41,6 +41,10 @@ export default function PublicLinksPage() {
         } catch (error) {
             message.error("Error al copiar el link");
         }
+    };
+
+    const handleOpenLink = () => {
+        window.open(generatedLink, "_blank", "noopener,noreferrer");
     };
 
     const handleDownloadQR = () => {
@@ -105,8 +109,7 @@ export default function PublicLinksPage() {
                                     placeholder="Selecciona un profesional"
                                     loading={loadingProfessionals}
                                     disabled={!selectedBranch}
-                                    showSearch
-                                    optionFilterProp="children"
+                                    showSearch={{optionFilterProp: "children"}}
                                 >
                                     {professionals.map((professional) => (
                                         <Select.Option key={professional.id} value={professional.id}>
@@ -145,6 +148,11 @@ export default function PublicLinksPage() {
                                     </label>
                                     <Space.Compact style={{ width: "100%" }}>
                                         <Input value={generatedLink} readOnly />
+                                        <Button
+                                            icon={<ExportOutlined />}
+                                            onClick={handleOpenLink}
+                                            title="Abrir en nueva pestaña"
+                                        />
                                         <Button
                                             type="primary"
                                             icon={<CopyOutlined />}

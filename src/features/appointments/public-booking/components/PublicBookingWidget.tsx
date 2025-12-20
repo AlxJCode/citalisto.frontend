@@ -326,7 +326,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
                                         paddingLeft: 24,
                                     }}
                                 >
-                                    {selectedBranch.address}
+                                    {`${selectedBranch.address} - ${selectedBranch.phone}`}
                                 </Text>
                             )}
                             <Divider style={{ margin: "8px 0", borderColor: "rgba(255,255,255,0.2)" }} />
@@ -549,7 +549,7 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
 
                                     {!loading && availableSlots.length === 0 && (
                                         <Alert
-                                            message="No hay horarios disponibles"
+                                            title="No hay horarios disponibles"
                                             description="Intenta con otra fecha."
                                             type="warning"
                                             showIcon
@@ -663,7 +663,13 @@ export function PublicBookingWidget({ businessSlug, queryParams }: PublicBooking
                                                 <Form.Item
                                                     name="phone"
                                                     label="Teléfono"
-                                                    rules={[{ required: true, message: "Requerido" }]}
+                                                    rules={[
+                                                        { required: true, message: "El teléfono es requerido" },
+                                                        {
+                                                            pattern: /^[0-9]{9}$/,
+                                                            message: "El teléfono debe tener 9 dígitos",
+                                                        },
+                                                    ]}
                                                 >
                                                     <Input placeholder="+51 999 888 777" />
                                                 </Form.Item>

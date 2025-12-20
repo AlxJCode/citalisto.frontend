@@ -179,6 +179,14 @@ export const BookingsList = ({
                 ),
             }}
             scroll={{ x: 1200 }}
+            onRow={(record) => ({
+                style: record.status === 'cancelled'
+                    ? {
+                        backgroundColor: '#fafafa',
+                        opacity: 0.6,
+                      }
+                    : undefined,
+            })}
         />
     );
 };
