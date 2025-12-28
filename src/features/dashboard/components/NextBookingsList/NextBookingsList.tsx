@@ -1,7 +1,9 @@
 import { Table, Tag, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { FC } from 'react';
 import { NextBooking } from '../../types/dashboard.types';
 import dayjs from 'dayjs';
+import styles from './styles.module.css';
 
 const { Text } = Typography;
 
@@ -23,15 +25,29 @@ const statusLabels: Record<NextBooking['status'], string> = {
     completed: 'Completada',
 };
 
-export const NextBookingsList = ({ bookings }: NextBookingsListProps) => {
+export const NextBookingsList: FC<NextBookingsListProps> = ({ bookings }) => {
+    const getDateLabel = (date: string) => {
+        const bookingDate = dayjs(date);
+        const today = dayjs().startOf('day');
+        const tomorrow = today.add(1, 'day');
+
+        if (bookingDate.isSame(today, 'day')) {
+            return 'Hoy';
+        }
+        if (bookingDate.isSame(tomorrow, 'day')) {
+            return 'Mañana';
+        }
+        return bookingDate.format('DD/MM/YYYY');
+    };
 
     const columns: ColumnsType<NextBooking> = [
         {
             title: 'Fecha y Hora',
             key: 'datetime',
+            width: 120,
             render: (_, record) => (
                 <div>
-                    <div>{dayjs(record.date).format('DD/MM/YYYY')}</div>
+                    <div className="font-medium">{getDateLabel(record.date)}</div>
                     <Text type="secondary" className="text-xs">
                         {record.startTime.substring(0, 5)}
                     </Text>
@@ -42,23 +58,25 @@ export const NextBookingsList = ({ bookings }: NextBookingsListProps) => {
             title: 'Cliente',
             dataIndex: 'customerName',
             key: 'customerName',
+            width: 150,
         },
         {
             title: 'Servicio',
             dataIndex: 'serviceName',
             key: 'serviceName',
-            responsive: ['md'],
+            width: 150,
         },
         {
             title: 'Profesional',
             dataIndex: 'professionalName',
             key: 'professionalName',
-            responsive: ['lg'],
+            width: 150,
         },
         {
             title: 'Estado',
             dataIndex: 'status',
             key: 'status',
+            width: 120,
             render: (status: NextBooking['status']) => (
                 <Tag color={statusColors[status]}>{statusLabels[status]}</Tag>
             ),
@@ -66,12 +84,15 @@ export const NextBookingsList = ({ bookings }: NextBookingsListProps) => {
     ];
 
     return (
-        <Table
-            columns={columns}
-            dataSource={bookings}
-            rowKey="id"
-            pagination={false}
-            size="small"
-        />
+        <div className={styles.tableWrapper}>
+            <Table
+                columns={columns}
+                dataSource={bookings}
+                rowKey="id"
+                pagination={false}
+                size="small"
+                scroll={{ x: 480 }}
+            />
+        </div>
     );
 };

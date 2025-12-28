@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useCallback, memo } from "react";
 import type { MenuProps } from "antd";
 import styles from "./BusinessCard.module.css";
+import Link from "next/link";
 
 interface BusinessCardProps {
     businessName?: string;
@@ -42,8 +43,10 @@ export const BusinessCard = memo(({
             {
                 key: "settings",
                 icon: <SettingOutlined />,
-                label: "Ajustes del negocio",
-                onClick: handleSettingsClick,
+                label: <Link href={"/settings"}>
+                    {"Ajustes del negocio"}
+                </Link>,
+                
             },
         ],
         [handleSettingsClick]

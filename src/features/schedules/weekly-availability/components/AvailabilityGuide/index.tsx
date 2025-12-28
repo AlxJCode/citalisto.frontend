@@ -115,7 +115,7 @@ export const AvailabilityGuide = () => {
                                             {
                                                 color: "red",
                                                 dot: <CloseCircleOutlined />,
-                                                children: (
+                                                content: (
                                                     <Space orientation="vertical" size="small">
                                                         <Text strong>Bloquear Día</Text>
                                                         <Text type="secondary">
@@ -130,7 +130,7 @@ export const AvailabilityGuide = () => {
                                             {
                                                 color: "green",
                                                 dot: <CheckCircleOutlined />,
-                                                children: (
+                                                content: (
                                                     <Space orientation="vertical" size="small">
                                                         <Text strong>Horario Personalizado</Text>
                                                         <Text type="secondary">

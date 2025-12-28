@@ -25,7 +25,7 @@ export const usePublicBooking = (businessSlug: string) => {
 
             if (!result.success) {
                 notification.error({
-                    message: "Error al cargar sucursales",
+                    title: "Error al cargar sucursales",
                     description: `E-${result.status} - ${result.message}`,
                     placement: "topRight",
                     duration: 10,
@@ -45,7 +45,7 @@ export const usePublicBooking = (businessSlug: string) => {
 
             if (!result.success) {
                 notification.error({
-                    message: "Error al cargar profesionales",
+                    title: "Error al cargar profesionales",
                     description: `E-${result.status} - ${result.message}`,
                     placement: "topRight",
                     duration: 10,
@@ -65,7 +65,7 @@ export const usePublicBooking = (businessSlug: string) => {
 
             if (!result.success) {
                 notification.error({
-                    message: "Error al cargar disponibilidad",
+                    title: "Error al cargar disponibilidad",
                     description: `E-${result.status} - ${result.message}`,
                     placement: "topRight",
                     duration: 10,
@@ -85,7 +85,7 @@ export const usePublicBooking = (businessSlug: string) => {
 
             if (!result.success) {
                 notification.error({
-                    message: "Error al crear la reserva",
+                    title: "Error al crear la reserva",
                     description: `E-${result.status} - ${result.message}`,
                     placement: "topRight",
                     duration: 10,
@@ -94,7 +94,7 @@ export const usePublicBooking = (businessSlug: string) => {
             }
 
             notification.success({
-                message: "¡Reserva creada exitosamente!",
+                title: "¡Reserva creada exitosamente!",
                 description: result.message || "Tu cita ha sido confirmada.",
                 placement: "topRight",
                 duration: 10,

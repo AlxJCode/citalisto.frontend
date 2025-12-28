@@ -54,6 +54,7 @@ export const DayScheduleRow = ({
                                 placeholder="Inicio"
                                 style={{ width: 90 }}
                                 disabled={saving}
+                                needConfirm={false}
                             />
                             <Text type="secondary">a</Text>
                             <TimePicker
@@ -61,6 +62,7 @@ export const DayScheduleRow = ({
                                 onChange={(time) => onTimeChange("endTime", time)}
                                 format="HH:mm"
                                 placeholder="Fin"
+                                needConfirm={false}
                                 style={{ width: 90 }}
                                 disabled={saving}
                             />
@@ -85,7 +87,9 @@ export const DayScheduleRow = ({
                                         placeholder="Inicio"
                                         style={{ width: 90 }}
                                         disabled={saving}
+                                        needConfirm={false}
                                     />
+                                    
                                     <Text type="secondary">a</Text>
                                     <TimePicker
                                         value={schedule.breakEndTime}
@@ -94,6 +98,8 @@ export const DayScheduleRow = ({
                                         placeholder="Fin"
                                         style={{ width: 90 }}
                                         disabled={saving}
+                                        needConfirm={false}
+                                        
                                     />
                                 </>
                             )}

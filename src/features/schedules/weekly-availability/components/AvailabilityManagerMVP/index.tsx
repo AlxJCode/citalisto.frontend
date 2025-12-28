@@ -203,6 +203,7 @@ export const AvailabilityManagerMVP = () => {
                                         defaultValue={dayjs(conf.start, "HH:mm")}
                                         format="HH:mm"
                                         className="w-full"
+                                        needConfirm={false}
                                     />
                                 </div>
 
@@ -212,6 +213,7 @@ export const AvailabilityManagerMVP = () => {
                                         defaultValue={dayjs(conf.end, "HH:mm")}
                                         format="HH:mm"
                                         className="w-full"
+                                        needConfirm={false}
                                     />
                                 </div>
                             </div>
@@ -250,11 +252,11 @@ export const AvailabilityManagerMVP = () => {
                                 label="Hora inicio"
                                 rules={[{ required: true }]}
                             >
-                                <TimePicker format="HH:mm" className="w-full" />
+                                <TimePicker format="HH:mm" className="w-full" needConfirm={false}/>
                             </Form.Item>
 
                             <Form.Item name="end" label="Hora fin" rules={[{ required: true }]}>
-                                <TimePicker format="HH:mm" className="w-full" />
+                                <TimePicker format="HH:mm" className="w-full" needConfirm={false}/>
                             </Form.Item>
                         </>
                     )}

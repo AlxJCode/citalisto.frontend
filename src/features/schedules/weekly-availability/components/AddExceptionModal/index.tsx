@@ -136,6 +136,7 @@ export const AddExceptionModal = ({ professionalId, selectedDate, onSuccess }: A
                                             format="HH:mm"
                                             placeholder="Inicio"
                                             style={{ width: "50%" }}
+                                            needConfirm={false}
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -147,6 +148,7 @@ export const AddExceptionModal = ({ professionalId, selectedDate, onSuccess }: A
                                             format="HH:mm"
                                             placeholder="Fin"
                                             style={{ width: "50%" }}
+                                            needConfirm={false}
                                         />
                                     </Form.Item>
                                 </Space.Compact>
@@ -171,6 +173,7 @@ export const AddExceptionModal = ({ professionalId, selectedDate, onSuccess }: A
                                                     format="HH:mm"
                                                     placeholder="Inicio descanso"
                                                     style={{ width: "50%" }}
+                                                    needConfirm={false}
                                                 />
                                             </Form.Item>
                                             <Form.Item
@@ -182,6 +185,7 @@ export const AddExceptionModal = ({ professionalId, selectedDate, onSuccess }: A
                                                     format="HH:mm"
                                                     placeholder="Fin descanso"
                                                     style={{ width: "50%" }}
+                                                    needConfirm={false}
                                                 />
                                             </Form.Item>
                                         </Space.Compact>

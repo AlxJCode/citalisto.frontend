@@ -196,6 +196,7 @@ export const BookingForm = ({
                             placeholder="Hora inicio"
                             format="HH:mm"
                             size="middle"
+                            needConfirm={false}
                             minuteStep={15}
                             onChange={handleStartTimeChange}
                         />
@@ -216,6 +217,7 @@ export const BookingForm = ({
                             style={{ width: "100%" }}
                             placeholder="Calculado automáticamente"
                             format="HH:mm"
+                            needConfirm={false}
                             size="middle"
                         />
                     </Form.Item>

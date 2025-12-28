@@ -1,0 +1,70 @@
+.card {
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.cardBody {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.progressWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progressContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.iconInRing {
+    font-size: 20px;
+    color: #666;
+}
+
+.percentText {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
+}
+
+.textContainer {
+    text-align: center;
+    width: 100%;
+}
+
+.value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    line-height: 1;
+    margin: 0;
+}
+
+.label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+.subtitle {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+    margin-bottom: 0;
+}

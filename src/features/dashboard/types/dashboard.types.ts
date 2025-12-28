@@ -16,19 +16,12 @@ export interface DashboardDataApi {
         limit: number;
         remaining: number;
         percentage: number;
+        period_start: string;
+        period_end: string;
     };
     next_bookings: NextBookingApi[];
-    bookings_origin: {
-        widget: number;
-        manual: number;
-        widget_percentage: number;
-    };
-    attendance: {
-        rate: number;
-        completed: number;
-        cancelled: number;
-    };
     top_services: TopServiceApi[];
+    monthly_revenue: MonthlyRevenueApi[];
 }
 
 export interface NextBookingApi {
@@ -45,6 +38,12 @@ export interface TopServiceApi {
     name: string;
     count: number;
     revenue: string;
+}
+
+export interface MonthlyRevenueApi {
+    month: string;
+    count: number;
+    total_revenue: string;
 }
 
 export interface DashboardData {
@@ -65,19 +64,12 @@ export interface DashboardData {
         limit: number;
         remaining: number;
         percentage: number;
+        periodStart: string;
+        periodEnd: string;
     };
     nextBookings: NextBooking[];
-    bookingsOrigin: {
-        widget: number;
-        manual: number;
-        widgetPercentage: number;
-    };
-    attendance: {
-        rate: number;
-        completed: number;
-        cancelled: number;
-    };
     topServices: TopService[];
+    monthlyRevenue: MonthlyRevenue[];
 }
 
 export interface NextBooking {
@@ -94,6 +86,12 @@ export interface TopService {
     name: string;
     count: number;
     revenue: string;
+}
+
+export interface MonthlyRevenue {
+    month: string;
+    count: number;
+    totalRevenue: string;
 }
 
 export const mapDashboardData = (api: DashboardDataApi): DashboardData => ({
@@ -114,6 +112,8 @@ export const mapDashboardData = (api: DashboardDataApi): DashboardData => ({
         limit: api.whatsapp.limit,
         remaining: api.whatsapp.remaining,
         percentage: api.whatsapp.percentage,
+        periodStart: api.whatsapp.period_start,
+        periodEnd: api.whatsapp.period_end,
     },
     nextBookings: api.next_bookings.map((booking) => ({
         id: booking.id,
@@ -124,19 +124,14 @@ export const mapDashboardData = (api: DashboardDataApi): DashboardData => ({
         professionalName: booking.professional_name,
         status: booking.status,
     })),
-    bookingsOrigin: {
-        widget: api.bookings_origin.widget,
-        manual: api.bookings_origin.manual,
-        widgetPercentage: api.bookings_origin.widget_percentage,
-    },
-    attendance: {
-        rate: api.attendance.rate,
-        completed: api.attendance.completed,
-        cancelled: api.attendance.cancelled,
-    },
     topServices: api.top_services.map((service) => ({
         name: service.name,
         count: service.count,
         revenue: service.revenue,
+    })),
+    monthlyRevenue: api.monthly_revenue.map((item) => ({
+        month: item.month,
+        count: item.count,
+        totalRevenue: item.total_revenue,
     })),
 });

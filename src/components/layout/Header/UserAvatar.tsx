@@ -8,6 +8,7 @@ import type { MenuProps } from "antd";
 import { logoutAction } from "@/features/auth/actions/auth.actions";
 import { useLoader } from "@/providers/LoaderProvider";
 import styles from "./UserAvatar.module.css";
+import Link from "next/link";
 
 interface UserAvatarProps {
     userName?: string;
@@ -67,14 +68,18 @@ export const UserAvatar = memo(({
             {
                 key: "profile",
                 icon: <UserOutlined />,
-                label: "Mi perfil",
-                onClick: handleProfileClick,
+                label: <Link href={"/settings"}>
+                    {"Mi perfil"}
+                </Link>,
+                
             },
             {
                 key: "settings",
                 icon: <SettingOutlined />,
-                label: "Configuración",
-                onClick: handleSettingsClick,
+                label: <Link href={"/settings"}>
+                    {"Configuración"}
+                </Link>,
+                
             },
             {
                 type: "divider",

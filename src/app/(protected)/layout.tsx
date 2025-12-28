@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { Sidebar } from "@/components/layout";
 
 export const dynamic = 'force-dynamic';
 

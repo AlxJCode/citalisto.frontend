@@ -321,6 +321,7 @@ export const CreateHistoricalBookingModal = ({ onSuccess }: CreateHistoricalBook
                                     format="HH:mm"
                                     style={{ width: "100%" }}
                                     size="middle"
+                                    needConfirm={false}
                                     onChange={(time) => {
                                         // Auto-calcular endTime si hay servicio seleccionado
                                         if (time && selectedService?.durationMinutes) {
@@ -340,6 +341,7 @@ export const CreateHistoricalBookingModal = ({ onSuccess }: CreateHistoricalBook
                                 <TimePicker
                                     placeholder="Hora de fin"
                                     format="HH:mm"
+                                    needConfirm={false}
                                     style={{ width: "100%" }}
                                     size="middle"
                                 />
