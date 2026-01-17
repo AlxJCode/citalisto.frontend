@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import styles from "./styles.module.css";
 
 interface GlobalLoaderProps {
@@ -35,7 +36,13 @@ export const GlobalLoader = ({ isVisible, text = "Cargando..." }: GlobalLoaderPr
                         />
                     </svg>
                     <div className={styles.logo}>
-                        <span className={styles.logoText}>C</span>
+                        <Image
+                            src="/images/logo-cuadrado-azul.webp"
+                            alt="citalisto Logo"
+                            width={52}
+                            height={52}
+                            className={styles.logoImage}
+                        />
                     </div>
                 </div>
                 {text && <p className={styles.text}>{text}</p>}

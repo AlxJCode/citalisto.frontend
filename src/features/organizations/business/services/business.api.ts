@@ -17,6 +17,12 @@ export const mapBusiness = (apiBusiness: BusinessApi): Business => ({
     owner: apiBusiness.owner,
     whatsappMonthlyLimit: apiBusiness.whatsapp_monthly_limit,
     ownerModel: apiBusiness.owner_model ? mapUser(apiBusiness.owner_model) : null,
+    enableEmailOnBooking: apiBusiness.enable_email_on_booking,
+    enableEmailReminder24h: apiBusiness.enable_email_reminder_24h,
+    enableEmailReminder2h: apiBusiness.enable_email_reminder_2h,
+    enableWhatsappOnBooking: apiBusiness.enable_whatsapp_on_booking,
+    enableWhatsappReminder24h: apiBusiness.enable_whatsapp_reminder_24h,
+    enableWhatsappReminder2h: apiBusiness.enable_whatsapp_reminder_2h,
     created: apiBusiness.created,
     modified: apiBusiness.modified,
     createdBy: apiBusiness.created_by,
@@ -92,7 +98,7 @@ export interface GetBusinessError {
 
 export type GetBusinessResult = GetBusinessSuccess | GetBusinessError;
 
-export const getBusinessApi = async (id: number): Promise<GetBusinessResult> => {
+export const getBusinessApi = async (id: number | string): Promise<GetBusinessResult> => {
     const res = await apiRequest<BusinessApi>(() =>
         apiClient.get(`/api/v1/organizations/business/${id}/`)
     );
@@ -130,9 +136,9 @@ export interface CreateBusinessError {
 
 export type CreateBusinessResult = CreateBusinessSuccess | CreateBusinessError;
 
-export const createBusinessApi = async (formData: Partial<BusinessApi>): Promise<CreateBusinessResult> => {
+export const createBusinessApi = async (formData: Partial<BusinessApi> | FormData): Promise<CreateBusinessResult> => {
     const res = await apiRequest<BusinessApi>(() =>
-        apiClient.post("/api/v1/organizations/business/", formData)
+        apiClient.post("/api/v1/organizations/business/", formData, { headers: { "Content-Type": "multipart/form-data" } })
     );
 
     if (!res.success) {
@@ -170,11 +176,11 @@ export interface UpdateBusinessError {
 export type UpdateBusinessResult = UpdateBusinessSuccess | UpdateBusinessError;
 
 export const updateBusinessApi = async (
-    id: number,
-    formData: Partial<BusinessApi>
+    id: number | string,
+    formData: Partial<BusinessApi> | FormData
 ): Promise<UpdateBusinessResult> => {
     const res = await apiRequest<BusinessApi>(() =>
-        apiClient.patch(`/api/v1/organizations/business/${id}/`, formData)
+        apiClient.patch(`/api/v1/organizations/business/${id}/`, formData, { headers: { "Content-Type": "multipart/form-data" } })
     );
 
     if (!res.success) {
@@ -209,7 +215,7 @@ export interface DeleteBusinessError {
 
 export type DeleteBusinessResult = DeleteBusinessSuccess | DeleteBusinessError;
 
-export const deleteBusinessApi = async (id: number): Promise<DeleteBusinessResult> => {
+export const deleteBusinessApi = async (id: number | string): Promise<DeleteBusinessResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/organizations/business/${id}/`)
     );

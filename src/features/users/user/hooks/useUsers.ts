@@ -6,6 +6,7 @@ import { message } from "antd";
 import {
     createUserApi,
     deleteUserApi,
+    getUserApi,
     getUsersApi,
     UserFilters,
     updateUserApi,
@@ -14,6 +15,7 @@ import { toCamelCase } from "@/lib/utils/case";
 
 export const useUsers = () => {
     const [users, setUsers] = useState<User[]>([]);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -31,6 +33,20 @@ export const useUsers = () => {
         setCount(result.count);
         setLoading(false);
     }, []);
+
+    const fetchUser = async (id: number | string) => {
+        setLoading(true);
+        const result = await getUserApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setUser(result.data);
+        setLoading(false);
+    };
 
     const createUser = async (formData: Partial<UserApi>): Promise<{
         success: boolean;
@@ -58,7 +74,7 @@ export const useUsers = () => {
         };
     };
 
-    const updateUser = async (id: number, formData: Partial<UserApi>): Promise<{
+    const updateUser = async (id: number | string, formData: Partial<UserApi>): Promise<{
         success: boolean;
         updatedObject?: User;
         errorFields?: Record<string, string[]>;
@@ -85,7 +101,7 @@ export const useUsers = () => {
         };
     };
 
-    const deleteUser = async (id: number) => {
+    const deleteUser = async (id: number | string) => {
         const result = await deleteUserApi(id);
 
         if (!result.success) {
@@ -99,9 +115,11 @@ export const useUsers = () => {
 
     return {
         users,
+        user,
         loading,
         count,
         fetchUsers,
+        fetchUser,
         createUser,
         updateUser,
         deleteUser,

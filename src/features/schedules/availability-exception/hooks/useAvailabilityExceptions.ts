@@ -9,6 +9,7 @@ import { message } from "antd";
 import {
     createAvailabilityExceptionApi,
     deleteAvailabilityExceptionApi,
+    getAvailabilityExceptionApi,
     getAvailabilityExceptionsApi,
     AvailabilityExceptionFilters,
     updateAvailabilityExceptionApi,
@@ -19,6 +20,7 @@ export const useAvailabilityExceptions = () => {
     const [availabilityExceptions, setAvailabilityExceptions] = useState<
         ProfessionalAvailabilityException[]
     >([]);
+    const [availabilityException, setAvailabilityException] = useState<ProfessionalAvailabilityException | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -36,6 +38,20 @@ export const useAvailabilityExceptions = () => {
         setCount(result.count);
         setLoading(false);
     }, []);
+
+    const fetchAvailabilityException = async (id: number | string) => {
+        setLoading(true);
+        const result = await getAvailabilityExceptionApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setAvailabilityException(result.data);
+        setLoading(false);
+    };
 
     const createAvailabilityException = async (
         formData: Partial<ProfessionalAvailabilityExceptionApi>
@@ -66,7 +82,7 @@ export const useAvailabilityExceptions = () => {
     };
 
     const updateAvailabilityException = async (
-        id: number,
+        id: number | string,
         formData: Partial<ProfessionalAvailabilityExceptionApi>
     ): Promise<{
         success: boolean;
@@ -95,7 +111,7 @@ export const useAvailabilityExceptions = () => {
         };
     };
 
-    const deleteAvailabilityException = async (id: number) => {
+    const deleteAvailabilityException = async (id: number | string) => {
         const result = await deleteAvailabilityExceptionApi(id);
 
         if (!result.success) {
@@ -109,9 +125,11 @@ export const useAvailabilityExceptions = () => {
 
     return {
         availabilityExceptions,
+        availabilityException,
         loading,
         count,
         fetchAvailabilityExceptions,
+        fetchAvailabilityException,
         createAvailabilityException,
         updateAvailabilityException,
         deleteAvailabilityException,

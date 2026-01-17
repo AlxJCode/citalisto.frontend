@@ -166,7 +166,7 @@ export interface GetBookingError {
 export type GetBookingResult = GetBookingSuccess | GetBookingError;
 
 export const getBookingApi = async (
-    id: number
+    id: number | string
 ): Promise<GetBookingResult> => {
     const res = await apiRequest<BookingApi>(() =>
         apiClient.get(`/api/v1/appointments/bookings/${id}/`)
@@ -271,7 +271,7 @@ export interface UpdateBookingError {
 export type UpdateBookingResult = UpdateBookingSuccess | UpdateBookingError;
 
 export const updateBookingApi = async (
-    id: number,
+    id: number | string,
     formData: Partial<BookingApi>
 ): Promise<UpdateBookingResult> => {
     const res = await apiRequest<BookingApi>(() =>
@@ -311,7 +311,7 @@ export interface DeleteBookingError {
 export type DeleteBookingResult = DeleteBookingSuccess | DeleteBookingError;
 
 export const deleteBookingApi = async (
-    id: number
+    id: number | string
 ): Promise<DeleteBookingResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/appointments/bookings/${id}/`)

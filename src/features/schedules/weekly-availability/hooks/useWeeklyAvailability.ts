@@ -10,6 +10,7 @@ import {
     createWeeklyAvailabilityApi,
     deleteWeeklyAvailabilityApi,
     getWeeklyAvailabilitiesApi,
+    getWeeklyAvailabilityApi,
     WeeklyAvailabilityFilters,
     updateWeeklyAvailabilityApi,
 } from "../services/weekly-availability.api";
@@ -19,6 +20,7 @@ export const useWeeklyAvailability = () => {
     const [weeklyAvailabilities, setWeeklyAvailabilities] = useState<
         ProfessionalWeeklyAvailability[]
     >([]);
+    const [weeklyAvailability, setWeeklyAvailability] = useState<ProfessionalWeeklyAvailability | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -36,6 +38,20 @@ export const useWeeklyAvailability = () => {
         setCount(result.count);
         setLoading(false);
     }, []);
+
+    const fetchWeeklyAvailability = async (id: number | string) => {
+        setLoading(true);
+        const result = await getWeeklyAvailabilityApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setWeeklyAvailability(result.data);
+        setLoading(false);
+    };
 
     const createWeeklyAvailability = async (
         formData: Partial<ProfessionalWeeklyAvailabilityApi>
@@ -66,7 +82,7 @@ export const useWeeklyAvailability = () => {
     };
 
     const updateWeeklyAvailability = async (
-        id: number,
+        id: number | string,
         formData: Partial<ProfessionalWeeklyAvailabilityApi>
     ): Promise<{
         success: boolean;
@@ -95,7 +111,7 @@ export const useWeeklyAvailability = () => {
         };
     };
 
-    const deleteWeeklyAvailability = async (id: number) => {
+    const deleteWeeklyAvailability = async (id: number | string) => {
         const result = await deleteWeeklyAvailabilityApi(id);
 
         if (!result.success) {
@@ -109,9 +125,11 @@ export const useWeeklyAvailability = () => {
 
     return {
         weeklyAvailabilities,
+        weeklyAvailability,
         loading,
         count,
         fetchWeeklyAvailabilities,
+        fetchWeeklyAvailability,
         createWeeklyAvailability,
         updateWeeklyAvailability,
         deleteWeeklyAvailability,

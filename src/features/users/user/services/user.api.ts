@@ -10,6 +10,7 @@ export const mapUser = (apiUser: UserApi): User => ({
     lastName: apiUser.last_name,
     motherLastName: apiUser.mother_last_name,
     email: apiUser.email,
+    phone: apiUser.phone,
     business: apiUser.business,
     businessModel: apiUser.business_model || null,
     role: apiUser.role,
@@ -96,7 +97,7 @@ export interface GetUserError {
 
 export type GetUserResult = GetUserSuccess | GetUserError;
 
-export const getUserApi = async (id: number): Promise<GetUserResult> => {
+export const getUserApi = async (id: number | string): Promise<GetUserResult> => {
     const res = await apiRequest<UserApi>(() =>
         apiClient.get(`/api/v1/users/users/${id}/`)
     );
@@ -136,7 +137,11 @@ export type CreateUserResult = CreateUserSuccess | CreateUserError;
 
 export const createUserApi = async (formData: Partial<UserApi>): Promise<CreateUserResult> => {
     const res = await apiRequest<UserApi>(() =>
-        apiClient.post("/api/v1/users/users/", formData)
+        apiClient.post("/api/v1/users/users/", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
     );
 
     if (!res.success) {
@@ -174,11 +179,15 @@ export interface UpdateUserError {
 export type UpdateUserResult = UpdateUserSuccess | UpdateUserError;
 
 export const updateUserApi = async (
-    id: number,
+    id: number | string,
     formData: Partial<UserApi>
 ): Promise<UpdateUserResult> => {
     const res = await apiRequest<UserApi>(() =>
-        apiClient.patch(`/api/v1/users/users/${id}/`, formData)
+        apiClient.patch(`/api/v1/users/users/${id}/`, formData,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
     );
 
     if (!res.success) {
@@ -213,7 +222,7 @@ export interface DeleteUserError {
 
 export type DeleteUserResult = DeleteUserSuccess | DeleteUserError;
 
-export const deleteUserApi = async (id: number): Promise<DeleteUserResult> => {
+export const deleteUserApi = async (id: number | string): Promise<DeleteUserResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/users/users/${id}/`)
     );

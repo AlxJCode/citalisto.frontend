@@ -43,7 +43,7 @@ export const BusinessCard = memo(({
             {
                 key: "settings",
                 icon: <SettingOutlined />,
-                label: <Link href={"/settings"}>
+                label: <Link href={"/settings/business"}>
                     {"Ajustes del negocio"}
                 </Link>,
                 

@@ -14,6 +14,7 @@ export interface UserApi extends BaseModel {
     last_name: string;
     mother_last_name?: string;
     email: string;
+    phone?: string | null;
     business?: number | null;
     business_model?: BusinessApi | null;
     role: UserRole;
@@ -31,6 +32,7 @@ export interface User extends BaseModelCamel {
     lastName: string;
     motherLastName?: string;
     email: string;
+    phone?: string | null;
     business?: number | null;
     businessModel?: BusinessApi | null;
     role: UserRole;

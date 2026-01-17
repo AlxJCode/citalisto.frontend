@@ -2,7 +2,7 @@
 
 import { PageContainer } from "@/components/layout/PageContainer";
 import { BookingsList } from "@/features/appointments/booking/components/BookingsList";
-import { AddBookingModal } from "@/features/appointments/booking/components/AddBookingModal";
+import { CreateBookingModal } from "@/features/appointments/booking/components/CreateBookingModal";
 import { useBookings } from "@/features/appointments/booking/hooks/useBookings";
 import { Card, Space, Flex } from "antd";
 import { useEffect, useState } from "react";
@@ -29,7 +29,7 @@ const BookingsPage = () => {
         <PageContainer
             title="Gestionar Citas"
             description="Administra las citas de tu negocio"
-            actions={<AddBookingModal onSuccess={refetch} />}
+            actions={<CreateBookingModal onSuccess={refetch} />}
         >
             <Flex vertical gap={8}>
                 <Card>

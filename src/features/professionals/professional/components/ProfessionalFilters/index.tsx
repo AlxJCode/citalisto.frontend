@@ -50,7 +50,7 @@ export const ProfessionalFilters = ({ onFiltersChange }: ProfessionalFiltersProp
                 />
             </Flex>
 
-            <Flex justify="space-between" align="center" gap={16}>
+            <Flex justify="space-between" align="center" gap={16} wrap="wrap">
                 <Input
                     placeholder="Buscar profesionales..."
                     prefix={<SearchOutlined />}

@@ -13,6 +13,7 @@ interface SessionUserApi {
     first_name: string;
     last_name: string;
     mother_last_name?: string;
+    phone?: string | null;
     role: string;
     role_display: string;
     business?: number | null;
@@ -36,6 +37,7 @@ function mapSessionUser(apiUser: SessionUserApi): SessionUser {
         firstName: apiUser.first_name,
         lastName: apiUser.last_name,
         motherLastName: apiUser.mother_last_name,
+        phone: apiUser.phone,
         role: apiUser.role as any,
         roleDisplay: apiUser.role_display,
         business: apiUser.business,
@@ -50,6 +52,12 @@ function mapSessionUser(apiUser: SessionUserApi): SessionUser {
             created: apiUser.business_model.created,
             isActive: apiUser.business_model.is_active,
             modified: apiUser.business_model.modified,
+            enableEmailOnBooking: apiUser.business_model.enable_email_on_booking,
+            enableEmailReminder24h: apiUser.business_model.enable_email_reminder_24h,
+            enableEmailReminder2h: apiUser.business_model.enable_email_reminder_2h,
+            enableWhatsappOnBooking: apiUser.business_model.enable_whatsapp_on_booking,
+            enableWhatsappReminder24h: apiUser.business_model.enable_whatsapp_reminder_24h,
+            enableWhatsappReminder2h: apiUser.business_model.enable_whatsapp_reminder_2h,
             phone: apiUser.business_model.phone,
             timezone: apiUser.business_model.timezone,
             owner: apiUser.business_model.owner,

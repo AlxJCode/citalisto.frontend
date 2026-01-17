@@ -1,17 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
-import { Form, FormInstance, Input, Button, Space, Divider, Row, Col, Select } from "antd";
+import { useEffect, useState } from "react";
+import { Form, FormInstance, Input, Button, Space, Divider, Row, Col, Select, Upload, Image, message } from "antd";
+import { PictureOutlined } from "@ant-design/icons";
+import type { UploadFile, RcFile } from "antd/es/upload/interface";
 import { Professional } from "../../types/professional.types";
 import { useServices } from "@/features/services-catalog/service/hooks/useServices";
 import { useBranches } from "@/features/organizations/branch/hooks/useBranches";
 
 interface ProfessionalFormProps {
     form: FormInstance;
-    onFinish: (values: Partial<Professional>) => void;
+    onFinish: (values: Partial<Professional>, file?: File) => void;
     loading?: boolean;
     onCancel?: () => void;
     mode?: "create" | "edit";
+    initialPhoto?: string;
 }
 
 export const ProfessionalForm = ({
@@ -20,26 +23,86 @@ export const ProfessionalForm = ({
     loading = false,
     onCancel,
     mode = "create",
+    initialPhoto,
 }: ProfessionalFormProps) => {
     const { services, loading: loadingServices, fetchServices } = useServices();
     const { branches, loading: loadingBranches, fetchBranches } = useBranches();
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
     useEffect(() => {
         fetchServices({ is_active: true, per_page: 100 });
         fetchBranches({ is_active: true, per_page: 100 });
     }, []);
 
+
+    const beforeUpload = (file: RcFile) => {
+        const isImage = file.type.startsWith("image/");
+        if (!isImage) {
+            message.error("Solo puedes subir archivos de imagen");
+            return Upload.LIST_IGNORE;
+        }
+
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error("La imagen debe pesar menos de 2MB");
+            return Upload.LIST_IGNORE;
+        }
+
+        return false;
+    };
+
+    const handleFinish = (values: Partial<Professional>) => {
+        const file = fileList[0]?.originFileObj;
+        onFinish(values, file);
+    };
+
     return (
         <Form
             form={form}
             layout="vertical"
-            onFinish={onFinish}
+            onFinish={handleFinish}
             disabled={loading}
             style={{ marginTop: 24 }}
         >
             <Divider titlePlacement="left" style={{ marginTop: 0 }}>
                 Datos Personales
             </Divider>
+
+            <Row gutter={16}>
+                <Col xs={24}>
+                    <Form.Item label="Foto de perfil (opcional)">
+                        <Space align="start" size="middle">
+                            {initialPhoto && mode === "edit" && (
+                                <Image
+                                    src={initialPhoto}
+                                    alt="Foto actual"
+                                    width={100}
+                                    height={100}
+                                    style={{ objectFit: "cover", borderRadius: 8 }}
+                                    preview
+                                />
+                            )}
+                            <Upload
+                                listType="picture-card"
+                                fileList={fileList}
+                                onChange={({ fileList }) => setFileList(fileList)}
+                                beforeUpload={beforeUpload}
+                                maxCount={1}
+                                accept="image/*"
+                            >
+                                {fileList.length === 0 && (
+                                    <div>
+                                        <PictureOutlined />
+                                        <div style={{ marginTop: 8 }}>
+                                            {mode === "edit" ? "Cambiar foto" : "Subir imagen"}
+                                        </div>
+                                    </div>
+                                )}
+                            </Upload>
+                        </Space>
+                    </Form.Item>
+                </Col>
+            </Row>
 
             <Row gutter={16}>
                 <Col xs={24} sm={12} lg={8}>

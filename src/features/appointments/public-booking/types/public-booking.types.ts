@@ -6,6 +6,8 @@ export interface PublicBranch {
     address?: string;
     phone?: string | null;
     business_name?: string | null;
+    business_slug?: string | null;
+    business_logo?: string | null;
 }
 
 export interface PublicProfessional {
@@ -20,6 +22,8 @@ export interface PublicProfessional {
 export interface PublicService {
     id: string;
     name: string;
+    description?: string | null;
+    image?: string | null;
     price: string;
     duration_minutes: number;
     is_active: boolean;

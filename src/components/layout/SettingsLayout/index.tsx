@@ -30,11 +30,6 @@ const menuItems = [
         label: <Link href="/settings/business">Mi Negocio</Link>,
     },
     {
-        key: '/settings/team',
-        icon: <TeamOutlined />,
-        label: <Link href="/settings/team">Equipo</Link>,
-    },
-    {
         key: '/settings/security',
         icon: <LockOutlined />,
         label: <Link href="/settings/security">Seguridad</Link>,

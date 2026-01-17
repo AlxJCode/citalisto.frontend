@@ -13,6 +13,7 @@ export interface ServiceApi extends BaseModel {
     branch_model?: BranchApi;
     name: string;
     description?: string | null;
+    image?: string | null;
     price: string;
     is_public: boolean;
     duration_minutes: number;
@@ -27,6 +28,7 @@ export interface Service extends BaseModelCamel {
     branchModel?: Branch | null;
     name: string;
     description?: string | null;
+    image?: string | null;
     price: string;
     isPublic: boolean;
     durationMinutes: number;

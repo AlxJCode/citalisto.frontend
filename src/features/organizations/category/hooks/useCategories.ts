@@ -7,6 +7,7 @@ import {
     createCategoryApi,
     deleteCategoryApi,
     getCategoriesApi,
+    getCategoryApi,
     CategoryFilters,
     updateCategoryApi,
 } from "../services/category.api";
@@ -14,6 +15,7 @@ import { toCamelCase } from "@/lib/utils/case";
 
 export const useCategories = () => {
     const [categories, setCategories] = useState<Category[]>([]);
+    const [category, setCategory] = useState<Category | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -31,6 +33,20 @@ export const useCategories = () => {
         setCount(result.count);
         setLoading(false);
     }, []);
+
+    const fetchCategory = async (id: number | string) => {
+        setLoading(true);
+        const result = await getCategoryApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setCategory(result.data);
+        setLoading(false);
+    };
 
     const createCategory = async (formData: Partial<CategoryApi>): Promise<{
         success: boolean;
@@ -58,7 +74,7 @@ export const useCategories = () => {
         };
     };
 
-    const updateCategory = async (id: number, formData: Partial<CategoryApi>): Promise<{
+    const updateCategory = async (id: number | string, formData: Partial<CategoryApi>): Promise<{
         success: boolean;
         updatedObject?: Category;
         errorFields?: Record<string, string[]>;
@@ -85,7 +101,7 @@ export const useCategories = () => {
         };
     };
 
-    const deleteCategory = async (id: number) => {
+    const deleteCategory = async (id: number | string) => {
         const result = await deleteCategoryApi(id);
 
         if (!result.success) {
@@ -99,9 +115,11 @@ export const useCategories = () => {
 
     return {
         categories,
+        category,
         loading,
         count,
         fetchCategories,
+        fetchCategory,
         createCategory,
         updateCategory,
         deleteCategory,

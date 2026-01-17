@@ -13,6 +13,7 @@ export const mapService = (apiService: ServiceApi): Service => ({
     description: apiService.description,
     price: `${parseFloat(apiService.price)}`,
     durationMinutes: apiService.duration_minutes,
+    image: apiService.image,
     created: apiService.created,
     modified: apiService.modified,
     createdBy: apiService.created_by,
@@ -119,7 +120,7 @@ export interface GetServiceError {
 export type GetServiceResult = GetServiceSuccess | GetServiceError;
 
 export const getServiceApi = async (
-    id: number
+    id: number | string
 ): Promise<GetServiceResult> => {
     const res = await apiRequest<ServiceApi>(() =>
         apiClient.get(`/api/v1/services-catalog/services/${id}/`)
@@ -159,10 +160,12 @@ export interface CreateServiceError {
 export type CreateServiceResult = CreateServiceSuccess | CreateServiceError;
 
 export const createServiceApi = async (
-    formData: Partial<ServiceApi>
+    formData: Partial<ServiceApi> | FormData,
 ): Promise<CreateServiceResult> => {
     const res = await apiRequest<ServiceApi>(() =>
-        apiClient.post("/api/v1/services-catalog/services/create/", formData)
+        apiClient.post("/api/v1/services-catalog/services/create/", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        })
     );
 
     if (!res.success) {
@@ -200,11 +203,13 @@ export interface UpdateServiceError {
 export type UpdateServiceResult = UpdateServiceSuccess | UpdateServiceError;
 
 export const updateServiceApi = async (
-    id: number,
-    formData: Partial<ServiceApi>
+    id: number | string,
+    formData: Partial<ServiceApi> | FormData,
 ): Promise<UpdateServiceResult> => {
     const res = await apiRequest<ServiceApi>(() =>
-        apiClient.patch(`/api/v1/services-catalog/services/${id}/`, formData)
+        apiClient.patch(`/api/v1/services-catalog/services/${id}/`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        })
     );
 
     if (!res.success) {
@@ -240,7 +245,7 @@ export interface DeleteServiceError {
 export type DeleteServiceResult = DeleteServiceSuccess | DeleteServiceError;
 
 export const deleteServiceApi = async (
-    id: number
+    id: number | string
 ): Promise<DeleteServiceResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/services-catalog/services/${id}/`)

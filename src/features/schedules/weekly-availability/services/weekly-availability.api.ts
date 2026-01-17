@@ -97,7 +97,7 @@ export interface GetWeeklyAvailabilityError {
 export type GetWeeklyAvailabilityResult = GetWeeklyAvailabilitySuccess | GetWeeklyAvailabilityError;
 
 export const getWeeklyAvailabilityApi = async (
-    id: number
+    id: number | string
 ): Promise<GetWeeklyAvailabilityResult> => {
     const res = await apiRequest<ProfessionalWeeklyAvailabilityApi>(() =>
         apiClient.get(`/api/v1/schedules/weekly-availabilities/${id}/`)
@@ -178,7 +178,7 @@ export interface UpdateWeeklyAvailabilityError {
 export type UpdateWeeklyAvailabilityResult = UpdateWeeklyAvailabilitySuccess | UpdateWeeklyAvailabilityError;
 
 export const updateWeeklyAvailabilityApi = async (
-    id: number,
+    id: number | string,
     formData: Partial<ProfessionalWeeklyAvailabilityApi>
 ): Promise<UpdateWeeklyAvailabilityResult> => {
     const res = await apiRequest<ProfessionalWeeklyAvailabilityApi>(() =>
@@ -218,7 +218,7 @@ export interface DeleteWeeklyAvailabilityError {
 export type DeleteWeeklyAvailabilityResult = DeleteWeeklyAvailabilitySuccess | DeleteWeeklyAvailabilityError;
 
 export const deleteWeeklyAvailabilityApi = async (
-    id: number
+    id: number | string
 ): Promise<DeleteWeeklyAvailabilityResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/schedules/weekly-availabilities/${id}/`)

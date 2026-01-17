@@ -109,7 +109,7 @@ export interface GetAvailabilityExceptionError {
 export type GetAvailabilityExceptionResult = GetAvailabilityExceptionSuccess | GetAvailabilityExceptionError;
 
 export const getAvailabilityExceptionApi = async (
-    id: number
+    id: number | string
 ): Promise<GetAvailabilityExceptionResult> => {
     const res = await apiRequest<ProfessionalAvailabilityExceptionApi>(() =>
         apiClient.get(`/api/v1/schedules/availability-exceptions/${id}/`)
@@ -190,7 +190,7 @@ export interface UpdateAvailabilityExceptionError {
 export type UpdateAvailabilityExceptionResult = UpdateAvailabilityExceptionSuccess | UpdateAvailabilityExceptionError;
 
 export const updateAvailabilityExceptionApi = async (
-    id: number,
+    id: number | string,
     formData: Partial<ProfessionalAvailabilityExceptionApi>
 ): Promise<UpdateAvailabilityExceptionResult> => {
     const res = await apiRequest<ProfessionalAvailabilityExceptionApi>(() =>
@@ -230,7 +230,7 @@ export interface DeleteAvailabilityExceptionError {
 export type DeleteAvailabilityExceptionResult = DeleteAvailabilityExceptionSuccess | DeleteAvailabilityExceptionError;
 
 export const deleteAvailabilityExceptionApi = async (
-    id: number
+    id: number | string
 ): Promise<DeleteAvailabilityExceptionResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/schedules/availability-exceptions/${id}/`)

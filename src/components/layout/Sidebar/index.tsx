@@ -3,6 +3,7 @@
 import { Layout, Menu } from "antd";
 import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { items } from "../items";
 import { Header } from "../Header";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -16,7 +17,14 @@ const { Sider, Content } = Layout;
 const Logo = memo(({ collapsed }: { collapsed: boolean }) => {
     return (
         <div className={styles.logo}>
-            {!collapsed && <span className={styles.logoText}>CitaListo</span>}
+            <Image
+                src={collapsed ? "/images/logo-cuadrado-citalisto.webp" : "/images/logo-horizontal-citalisto.webp"}
+                alt="CitaListo"
+                width={collapsed ? 40 : 150}
+                height={40}
+                priority
+                className={styles.logoImage}
+            />
         </div>
     );
 });

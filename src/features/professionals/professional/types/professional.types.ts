@@ -10,6 +10,7 @@ export interface ProfessionalApi extends BaseModel {
     last_name?: string | null;
     email: string | null;
     phone: string;
+    profile_photo?: string | null;
     description: string | null;
     services: number[];
     services_model?: ServiceApi[] | null;
@@ -23,6 +24,7 @@ export interface Professional extends BaseModelCamel {
     lastName?: string | null;
     email: string | null;
     phone: string;
+    profilePhoto?: string | null;
     description: string | null;
     services: number[];
     servicesModel?: Service[] | null;

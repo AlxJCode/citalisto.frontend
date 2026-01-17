@@ -7,6 +7,7 @@ import {
     BranchFiltersProps,
     createBranchApi,
     deleteBranchApi,
+    getBranchApi,
     getBranchesApi,
     updateBranchApi,
 } from "../services/branch.api";
@@ -14,6 +15,7 @@ import { toCamelCase } from "@/lib/utils/case";
 
 export const useBranches = () => {
     const [branches, setBranches] = useState<Branch[]>([]);
+    const [branch, setBranch] = useState<Branch | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -31,6 +33,20 @@ export const useBranches = () => {
         setCount(result.count);
         setLoading(false);
     }, []);
+
+    const fetchBranch = async (id: number | string) => {
+        setLoading(true);
+        const result = await getBranchApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setBranch(result.data);
+        setLoading(false);
+    };
 
     const createBranch = async (formData: Partial<BranchApi>): Promise<{
         success: boolean;
@@ -58,7 +74,7 @@ export const useBranches = () => {
         };
     };
 
-    const updateBranch = async (id: number, formData: Partial<BranchApi>): Promise<{
+    const updateBranch = async (id: number | string, formData: Partial<BranchApi>): Promise<{
         success: boolean;
         updatedObject?: Branch;
         errorFields?: Record<string, string[]>;
@@ -85,7 +101,7 @@ export const useBranches = () => {
         };
     };
 
-    const deleteBranch = async (id: number) => {
+    const deleteBranch = async (id: number | string) => {
         const result = await deleteBranchApi(id);
 
         if (!result.success) {
@@ -99,9 +115,11 @@ export const useBranches = () => {
 
     return {
         branches,
+        branch,
         loading,
         count,
         fetchBranches,
+        fetchBranch,
         createBranch,
         updateBranch,
         deleteBranch,

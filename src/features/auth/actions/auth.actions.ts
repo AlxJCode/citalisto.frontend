@@ -145,3 +145,32 @@ export async function refreshTokenAction(): Promise<ActionResult> {
         };
     }
 }
+
+/**
+ * Refresh user data Server Action
+ * Call after updating user profile to refresh session data
+ */
+export async function refreshUserDataAction(): Promise<ActionResult> {
+    try {
+        const { refreshUserData } = await import("@/lib/auth/session");
+        const userData = await refreshUserData();
+
+        if (!userData) {
+            return {
+                success: false,
+                error: "Failed to refresh user data",
+            };
+        }
+
+        return {
+            success: true,
+            message: "User data refreshed",
+        };
+    } catch (error) {
+        console.error("Refresh user data error:", error);
+        return {
+            success: false,
+            error: "Failed to refresh user data",
+        };
+    }
+}

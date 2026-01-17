@@ -13,6 +13,7 @@ export interface SessionUser {
     firstName: string;
     lastName: string;
     motherLastName?: string;
+    phone?: string | null;
     role: UserRole;
     roleDisplay: string;
     business?: number | null;

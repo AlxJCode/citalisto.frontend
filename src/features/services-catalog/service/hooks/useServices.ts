@@ -1,4 +1,3 @@
-// TODO: Implementar useServices hook
 "use client";
 
 import { useState, useCallback } from "react";
@@ -7,6 +6,7 @@ import { message } from "antd";
 import {
     createServiceApi,
     deleteServiceApi,
+    getServiceApi,
     getServicesApi,
     ServiceFilters,
     updateServiceApi,
@@ -15,6 +15,7 @@ import { toCamelCase } from "@/lib/utils/case";
 
 export const useServices = () => {
     const [services, setServices] = useState<Service[]>([]);
+    const [service, setService] = useState<Service | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -33,7 +34,21 @@ export const useServices = () => {
         setLoading(false);
     }, []);
 
-    const createService = async (formData: Partial<ServiceApi>): Promise<{
+    const fetchService = async (id: number | string) => {
+        setLoading(true);
+        const result = await getServiceApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setService(result.data);
+        setLoading(false);
+    };
+
+    const createService = async (formData: Partial<ServiceApi> | FormData): Promise<{
         success: boolean;
         newObject?: Service;
         errorFields?: Record<string, string[]>;
@@ -59,7 +74,7 @@ export const useServices = () => {
         };
     };
 
-    const updateService = async (id: number, formData: Partial<ServiceApi>): Promise<{
+    const updateService = async (id: number | string, formData: Partial<ServiceApi> | FormData): Promise<{
         success: boolean;
         updatedObject?: Service;
         errorFields?: Record<string, string[]>;
@@ -86,7 +101,7 @@ export const useServices = () => {
         };
     };
 
-    const deleteService = async (id: number) => {
+    const deleteService = async (id: number | string) => {
         const result = await deleteServiceApi(id);
 
         if (!result.success) {
@@ -100,9 +115,11 @@ export const useServices = () => {
 
     return {
         services,
+        service,
         loading,
         count,
         fetchServices,
+        fetchService,
         createService,
         updateService,
         deleteService,

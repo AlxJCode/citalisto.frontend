@@ -16,11 +16,9 @@ interface BookingFiltersProps {
 
 type StatusFilter = "all" | "pending" | "confirmed" | "cancelled" | "completed";
 
-const TODAY = dayjs();
-
 export const BookingFilters = ({ onFiltersChange }: BookingFiltersProps) => {
     const [status, setStatus] = useState<StatusFilter>("all");
-    const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>([TODAY, TODAY]);
+    const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null] | null>(null);
     const [selectedProfessional, setSelectedProfessional] = useState<number | undefined>();
     const [selectedCustomer, setSelectedCustomer] = useState<number | undefined>();
     const [searchProfessional, setSearchProfessional] = useState("");
@@ -55,7 +53,7 @@ export const BookingFilters = ({ onFiltersChange }: BookingFiltersProps) => {
 
     const clearFilters = () => {
         setStatus("all");
-        setDateRange([TODAY, TODAY]);
+        setDateRange(null);
         setSelectedProfessional(undefined);
         setSelectedCustomer(undefined);
         setSearchProfessional("");

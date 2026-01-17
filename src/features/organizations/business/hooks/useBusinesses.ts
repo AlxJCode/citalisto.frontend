@@ -7,6 +7,7 @@ import {
     createBusinessApi,
     deleteBusinessApi,
     getBusinessesApi,
+    getBusinessApi,
     BusinessFilters,
     updateBusinessApi,
 } from "../services/business.api";
@@ -32,7 +33,21 @@ export const useBusinesses = () => {
         setLoading(false);
     }, []);
 
-    const createBusiness = async (formData: Partial<BusinessApi>): Promise<{
+    const fetchBusiness = async (id: number | string) => {
+        setLoading(true);
+        const result = await getBusinessApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return null;
+        }
+
+        setLoading(false);
+        return result.data;
+    };
+
+    const createBusiness = async (formData: Partial<BusinessApi> | FormData): Promise<{
         success: boolean;
         newObject?: Business;
         errorFields?: Record<string, string[]>;
@@ -58,7 +73,7 @@ export const useBusinesses = () => {
         };
     };
 
-    const updateBusiness = async (id: number, formData: Partial<BusinessApi>): Promise<{
+    const updateBusiness = async (id: number | string, formData: Partial<BusinessApi> | FormData): Promise<{
         success: boolean;
         updatedObject?: Business;
         errorFields?: Record<string, string[]>;
@@ -77,7 +92,7 @@ export const useBusinesses = () => {
             };
         }
 
-        message.success(result.message);
+        //message.success(result.message);
         return {
             success: result.success,
             updatedObject: result.data,
@@ -85,7 +100,7 @@ export const useBusinesses = () => {
         };
     };
 
-    const deleteBusiness = async (id: number) => {
+    const deleteBusiness = async (id: number | string) => {
         const result = await deleteBusinessApi(id);
 
         if (!result.success) {
@@ -102,6 +117,7 @@ export const useBusinesses = () => {
         loading,
         count,
         fetchBusinesses,
+        fetchBusiness,
         createBusiness,
         updateBusiness,
         deleteBusiness,

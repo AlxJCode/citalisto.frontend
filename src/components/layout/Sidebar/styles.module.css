@@ -1,20 +1,18 @@
 /* Logo styles */
 .logo {
-    height: 48px;
+    height: 64px;
     margin: 16px;
-    background: var(--ant-primary-color);
-    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+    background-color: var(--ant-primary-color);
+    border-radius: 10px;
 }
 
-.logoText {
-    color: #fff;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 1px;
+.logoImage {
+    object-fit: contain;
+    transition: all 0.2s;
 }
 
 /* Sidebar fijo */

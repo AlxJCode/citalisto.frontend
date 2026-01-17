@@ -6,6 +6,7 @@ import { message } from "antd";
 import {
     createCustomerApi,
     deleteCustomerApi,
+    getCustomerApi,
     updateCustomerApi,
     CustomerFiltersProps,
     getCustomersApi,
@@ -14,6 +15,7 @@ import { toCamelCase } from "@/lib/utils/case";
 
 export const useCustomers = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
+    const [customer, setCustomer] = useState<Customer | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -31,6 +33,20 @@ export const useCustomers = () => {
         setCount(result.count);
         setLoading(false);
     }, []);
+
+    const fetchCustomer = async (id: number | string) => {
+        setLoading(true);
+        const result = await getCustomerApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setCustomer(result.data);
+        setLoading(false);
+    };
 
     const createCustomer = async (formData: Partial<CustomerApi>): Promise<{
         success: boolean;
@@ -58,7 +74,7 @@ export const useCustomers = () => {
         };
     };
 
-    const updateCustomer = async (id: number, formData: Partial<CustomerApi>): Promise<{
+    const updateCustomer = async (id: number | string, formData: Partial<CustomerApi>): Promise<{
         success: boolean;
         updatedObject?: Customer;
         errorFields?: Record<string, string[]>;
@@ -85,7 +101,7 @@ export const useCustomers = () => {
         };
     };
 
-    const deleteCustomer = async (id: number) => {
+    const deleteCustomer = async (id: number | string) => {
         const result = await deleteCustomerApi(id);
 
         if (!result.success) {
@@ -99,9 +115,11 @@ export const useCustomers = () => {
 
     return {
         customers,
+        customer,
         loading,
         count,
         fetchCustomers,
+        fetchCustomer,
         createCustomer,
         updateCustomer,
         deleteCustomer,

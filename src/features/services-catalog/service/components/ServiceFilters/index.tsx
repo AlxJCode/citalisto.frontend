@@ -51,7 +51,7 @@ export const ServiceFilters = ({ onFiltersChange, loading }: ServiceFiltersProps
                 />
             </Flex>
 
-            <Flex justify="space-between" align="center" gap={16}>
+            <Flex justify="space-between" align="center" gap={16} wrap="wrap">
                 <Input
                     placeholder="Buscar servicios..."
                     prefix={<SearchOutlined />}

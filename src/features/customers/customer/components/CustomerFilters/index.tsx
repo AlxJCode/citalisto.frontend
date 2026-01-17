@@ -50,7 +50,7 @@ export const CustomerFilters = ({ onFiltersChange }: CustomerFiltersProps) => {
                 />
             </Flex>
 
-            <Flex justify="space-between" align="center" gap={16}>
+            <Flex justify="space-between" align="center" gap={16} wrap="wrap">
                 <Input
                     placeholder="Buscar clientes..."
                     prefix={<SearchOutlined />}

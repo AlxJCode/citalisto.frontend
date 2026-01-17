@@ -100,7 +100,7 @@ export interface GetBranchError {
 export type GetBranchResult = GetBranchSuccess | GetBranchError;
 
 export const getBranchApi = async (
-    id: number
+    id: number | string
 ): Promise<GetBranchResult> => {
     const res = await apiRequest<BranchApi>(() =>
         apiClient.get(`/api/v1/organizations/branches/${id}/`)
@@ -140,7 +140,7 @@ export interface CreateBranchError {
 export type CreateBranchResult = CreateBranchSuccess | CreateBranchError;
 
 export const createBranchApi = async (
-    formData: Partial<BranchApi>
+    formData: Partial<BranchApi> | FormData
 ): Promise<CreateBranchResult> => {
     const res = await apiRequest<BranchApi>(() =>
         apiClient.post("/api/v1/organizations/branches/", formData)
@@ -181,8 +181,8 @@ export interface UpdateBranchError {
 export type UpdateBranchResult = UpdateBranchSuccess | UpdateBranchError;
 
 export const updateBranchApi = async (
-    id: number,
-    formData: Partial<BranchApi>
+    id: number | string,
+    formData: Partial<BranchApi> | FormData
 ): Promise<UpdateBranchResult> => {
     const res = await apiRequest<BranchApi>(() =>
         apiClient.patch(`/api/v1/organizations/branches/${id}/`, formData)
@@ -221,7 +221,7 @@ export interface DeleteBranchError {
 export type DeleteBranchResult = DeleteBranchSuccess | DeleteBranchError;
 
 export const deleteBranchApi = async (
-    id: number
+    id: number | string
 ): Promise<DeleteBranchResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/organizations/branches/${id}/`)

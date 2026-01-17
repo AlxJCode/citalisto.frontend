@@ -1,12 +1,10 @@
 "use client";
 
-import { Table, Space, TableColumnsType, Tag, Typography, Select, message } from "antd";
+import { Table, TableColumnsType, Tag, message, Select } from "antd";
 import { Booking, BookingStatus } from "../../types/booking.types";
 import { Dispatch, SetStateAction } from "react";
 import { EditBookingModal } from "../EditBookingModal";
-import { DeleteBookingModal } from "../DeleteBookingModal";
 import dayjs from "dayjs";
-import { MailOutlined, WhatsAppOutlined } from "@ant-design/icons";
 import { updateBookingApi } from "../../services/booking.api";
 
 interface BookingsListProps {
@@ -40,84 +38,77 @@ export const BookingsList = ({
     page,
     count,
 }: BookingsListProps) => {
+
     const columns: TableColumnsType<Booking> = [
         {
             title: "#",
             key: "index",
-            width: 60,
+            width: 50,
             render: (_, __, index) => (page - 1) * 10 + index + 1,
         },
         {
             title: "Fecha",
             dataIndex: "date",
             key: "date",
-            width: 120,
-            render: (date, record) => {
-                return (
-                    <span>{`${dayjs(date, "YYYY-MM-DD").format("DD/MM/YYYY")} ${record.startTime ? dayjs(record.startTime, "HH:mm:ss").format("HH:mm") : ""}`}</span>
-                )
-            }
+            width: 110,
+            render: (date, record) => (
+                <div style={{ fontSize: "13px" }}>
+                    <div>{dayjs(date, "YYYY-MM-DD").format("DD/MM/YYYY")}</div>
+                    <div className="text-gray-500 text-xs">
+                        {record.startTime ? dayjs(record.startTime, "HH:mm:ss").format("HH:mm") : "-"}
+                    </div>
+                </div>
+            ),
         },
         {
             title: "Cliente",
             key: "customer",
             ellipsis: true,
-            render: (_, record) => {
-                return (
-                    <Space orientation="vertical" size={0}>
-                        <div>{record.customerModel ? `${record.customerModel.name} ${record.customerModel.lastName}` : "-"}</div>
-                        <Typography.Text type="secondary" style={{fontSize: "12px", marginBottom: "0", paddingBottom: "0"}}>{record.customerModel ? record.customerModel.phone : "-"}</Typography.Text>
-                        <Typography.Text type="secondary"  style={{fontSize: "12px"}}>{record.customerModel ? record.customerModel.email : "-"}</Typography.Text>
-                    </Space>
-                )
-            }
-                
+            render: (_, record) => (
+                <div style={{ fontSize: "13px" }}>
+                    <div className="font-medium">
+                        {record.customerModel
+                            ? `${record.customerModel.name} ${record.customerModel.lastName}`
+                            : "-"}
+                    </div>
+                    <div className="text-gray-500 text-xs">
+                        {record.customerModel?.phone || "-"} • {record.customerModel?.email || "-"}
+                    </div>
+                </div>
+            ),
         },
         {
             title: "Servicio",
             key: "service",
             ellipsis: true,
-            render: (_, record) => {
-                return (
-                    <div>
-                        <div>
-                            {record.serviceModel ? record.serviceModel.name : "-"}
-                        </div>
-                        <div>
-                            {record?.price ? `(S/. ${record?.price})`: ""}
-                        </div>
-                    </div>
-                )
-            },
+            render: (_, record) => (
+                <span style={{ fontSize: "13px" }}>
+                    {record.serviceModel?.name || "-"}
+                    {record.price && (
+                        <span className="text-gray-500 ml-1">
+                            (S/. {record.price})
+                        </span>
+                    )}
+                </span>
+            ),
         },
         {
             title: "Profesional",
             key: "professional",
             ellipsis: true,
-            render: (_, record) =>
-                record.professionalModel
-                    ? `${record.professionalModel.name} ${record.professionalModel.lastName}`
-                    : "-",
-        },
-        {
-            title: "Notificación",
-            dataIndex: "notification",
-            key: "notification",
-            render: (_, record) => {
-                return (
-                    <Space wrap>
-                        {record.notifyByWhatsapp && <Tag color="green" icon={<WhatsAppOutlined />}>WhatsApp</Tag>}
-                        {record.notifyByEmail && <Tag color="blue" icon={<MailOutlined />}>Email</Tag>}
-                        {!record.notifyByEmail && !record.notifyByWhatsapp && <Tag color="default">Sin notificar</Tag>}
-                    </Space>
-                )
-            },
+            render: (_, record) => (
+                <span style={{ fontSize: "13px" }}>
+                    {record.professionalModel
+                        ? `${record.professionalModel.name} ${record.professionalModel.lastName}`
+                        : "-"}
+                </span>
+            ),
         },
         {
             title: "Estado",
             dataIndex: "status",
             key: "status",
-            width: 150,
+            width: 130,
             render: (status: BookingStatus, record) => (
                 <Select
                     value={status}
@@ -132,6 +123,7 @@ export const BookingsList = ({
                         }
                     }}
                     style={{ width: '100%' }}
+                    size="small"
                     options={[
                         { value: 'pending', label: <Tag color="warning" variant="solid">Pendiente</Tag> },
                         { value: 'confirmed', label: <Tag color="processing" variant="solid">Confirmada</Tag> },
@@ -144,19 +136,10 @@ export const BookingsList = ({
         {
             title: "Acciones",
             key: "actions",
-            width: 120,
+            width: 80,
             fixed: "right",
             render: (_, record) => (
-                <Space size="small">
-                    <EditBookingModal
-                        booking={record}
-                        onSuccess={onRefetch}
-                    />
-                    {/* <DeleteBookingModal
-                        booking={record}
-                        onSuccess={onRefetch}
-                    /> */}
-                </Space>
+                <EditBookingModal booking={record} onSuccess={onRefetch} />
             ),
         },
     ];
@@ -178,12 +161,12 @@ export const BookingsList = ({
                     <span style={{ flex: "0 0 auto" }}>Total: {total} citas</span>
                 ),
             }}
-            scroll={{ x: 1200 }}
+            scroll={{ x: 1000 }}
             onRow={(record) => ({
-                style: record.status === 'cancelled'
+                style: record.status === "cancelled"
                     ? {
-                        backgroundColor: '#fafafa',
-                        opacity: 0.6,
+                          backgroundColor: "#fafafa",
+                          opacity: 0.6,
                       }
                     : undefined,
             })}

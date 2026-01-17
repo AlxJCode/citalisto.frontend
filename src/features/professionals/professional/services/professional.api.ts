@@ -16,6 +16,7 @@ export const mapProfessional = (apiProfessional: ProfessionalApi): Professional 
     isActive: apiProfessional.is_active,
     email: apiProfessional.email,
     phone: apiProfessional.phone,
+    profilePhoto: apiProfessional.profile_photo,
     description: apiProfessional.description,
     services: apiProfessional.services,
     servicesModel: apiProfessional.services_model
@@ -35,6 +36,7 @@ export const mapProfessionalToApi = (professional: Partial<Professional>): Parti
         email: professional.email,
         branch: professional.branch,
         phone: professional.phone,
+        profile_photo: professional.profilePhoto,
         description: professional.description,
         services: professional.services,
     };
@@ -116,7 +118,7 @@ export interface GetProfessionalError {
 export type GetProfessionalResult = GetProfessionalSuccess | GetProfessionalError;
 
 export const getProfessionalApi = async (
-    id: number
+    id: number | string
 ): Promise<GetProfessionalResult> => {
     const res = await apiRequest<ProfessionalApi>(() =>
         apiClient.get(`/api/v1/professionals/professionals/${id}/`)
@@ -156,10 +158,12 @@ export interface CreateProfessionalError {
 export type CreateProfessionalResult = CreateProfessionalSuccess | CreateProfessionalError;
 
 export const createProfessionalApi = async (
-    formData: Partial<ProfessionalApi>
+    formData: Partial<ProfessionalApi> | FormData
 ): Promise<CreateProfessionalResult> => {
     const res = await apiRequest<ProfessionalApi>(() =>
-        apiClient.post("/api/v1/professionals/professionals/create/", formData)
+        apiClient.post("/api/v1/professionals/professionals/create/", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        })
     );
 
     if (!res.success) {
@@ -197,11 +201,13 @@ export interface UpdateProfessionalError {
 export type UpdateProfessionalResult = UpdateProfessionalSuccess | UpdateProfessionalError;
 
 export const updateProfessionalApi = async (
-    id: number,
-    formData: Partial<ProfessionalApi>
+    id: number | string,
+    formData: Partial<ProfessionalApi> | FormData,
 ): Promise<UpdateProfessionalResult> => {
     const res = await apiRequest<ProfessionalApi>(() =>
-        apiClient.patch(`/api/v1/professionals/professionals/${id}/`, formData)
+        apiClient.patch(`/api/v1/professionals/professionals/${id}/`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        })
     );
 
     if (!res.success) {
@@ -237,7 +243,7 @@ export interface DeleteProfessionalError {
 export type DeleteProfessionalResult = DeleteProfessionalSuccess | DeleteProfessionalError;
 
 export const deleteProfessionalApi = async (
-    id: number
+    id: number | string
 ): Promise<DeleteProfessionalResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/professionals/professionals/${id}/`)

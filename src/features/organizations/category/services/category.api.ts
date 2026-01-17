@@ -17,6 +17,8 @@ export const mapCategory = (apiCategory: CategoryApi): Category => ({
 export interface CategoryFilters {
     page?: number;
     search?: string;
+    per_page?: number;
+    is_active?: boolean;
 }
 
 // Tipo de retorno para GET lista
@@ -41,6 +43,8 @@ export const getCategoriesApi = async (filters?: CategoryFilters): Promise<GetCa
 
     if (filters?.page) params.append("page", filters.page.toString());
     if (filters?.search) params.append("search", filters.search);
+    if (filters?.per_page) params.append("per_page", filters.per_page.toString());
+    if (filters?.is_active !== undefined) params.append("is_active", filters.is_active ? "1" : "0");
 
     const res = await apiRequest<CategoryApi[]>(() =>
         apiClient.get(`/api/v1/organizations/categories/?${params.toString()}`)
@@ -79,7 +83,7 @@ export interface GetCategoryError {
 
 export type GetCategoryResult = GetCategorySuccess | GetCategoryError;
 
-export const getCategoryApi = async (id: number): Promise<GetCategoryResult> => {
+export const getCategoryApi = async (id: number | string): Promise<GetCategoryResult> => {
     const res = await apiRequest<CategoryApi>(() =>
         apiClient.get(`/api/v1/organizations/categories/${id}/`)
     );
@@ -157,7 +161,7 @@ export interface UpdateCategoryError {
 export type UpdateCategoryResult = UpdateCategorySuccess | UpdateCategoryError;
 
 export const updateCategoryApi = async (
-    id: number,
+    id: number | string,
     formData: Partial<CategoryApi>
 ): Promise<UpdateCategoryResult> => {
     const res = await apiRequest<CategoryApi>(() =>
@@ -196,7 +200,7 @@ export interface DeleteCategoryError {
 
 export type DeleteCategoryResult = DeleteCategorySuccess | DeleteCategoryError;
 
-export const deleteCategoryApi = async (id: number): Promise<DeleteCategoryResult> => {
+export const deleteCategoryApi = async (id: number | string): Promise<DeleteCategoryResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/organizations/categories/${id}/`)
     );

@@ -6,6 +6,7 @@ import { message } from "antd";
 import {
     createProfessionalApi,
     deleteProfessionalApi,
+    getProfessionalApi,
     getProfessionalsApi,
     ProfessionalFilters,
     updateProfessionalApi,
@@ -14,6 +15,7 @@ import { toCamelCase } from "@/lib/utils/case";
 
 export const useProfessionals = () => {
     const [professionals, setProfessionals] = useState<Professional[]>([]);
+    const [professional, setProfessional] = useState<Professional | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -32,13 +34,27 @@ export const useProfessionals = () => {
         setLoading(false);
     }, []);
 
-    const createProfessional = async (formData: Partial<ProfessionalApi>): Promise<{
+    const fetchProfessional = async (id: number | string) => {
+        setLoading(true);
+        const result = await getProfessionalApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setProfessional(result.data);
+        setLoading(false);
+    };
+
+    const createProfessional = async (formData: Partial<ProfessionalApi> | FormData): Promise<{
         success: boolean;
         newObject?: Professional;
         errorFields?: Record<string, string[]>;
         status?: number;
     }> => {
-        const result = await createProfessionalApi(formData as ProfessionalApi);
+        const result = await createProfessionalApi(formData);
 
         if (!result.success) {
             message.error(`E-${result.status} - ${result.message}`);
@@ -58,7 +74,7 @@ export const useProfessionals = () => {
         };
     };
 
-    const updateProfessional = async (id: number, formData: Partial<ProfessionalApi>): Promise<{
+    const updateProfessional = async (id: number | string, formData: Partial<ProfessionalApi> | FormData): Promise<{
         success: boolean;
         updatedObject?: Professional;
         errorFields?: Record<string, string[]>;
@@ -85,7 +101,7 @@ export const useProfessionals = () => {
         };
     };
 
-    const deleteProfessional = async (id: number) => {
+    const deleteProfessional = async (id: number | string) => {
         const result = await deleteProfessionalApi(id);
 
         if (!result.success) {
@@ -99,9 +115,11 @@ export const useProfessionals = () => {
 
     return {
         professionals,
+        professional,
         loading,
         count,
         fetchProfessionals,
+        fetchProfessional,
         createProfessional,
         updateProfessional,
         deleteProfessional,

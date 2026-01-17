@@ -1,10 +1,11 @@
 "use client";
 
-import { Table, Space, TableColumnsType, Tag } from "antd";
+import { Table, Space, TableColumnsType, Tag, Avatar, Image } from "antd";
 import { Professional } from "../../types/professional.types";
 import { Dispatch, SetStateAction } from "react";
 import { EditProfessionalModal } from "../EditProfessionalModal";
 import { DeleteProfessionalModal } from "../DeleteProfessionalModal";
+import { UserOutlined } from "@ant-design/icons";
 
 interface ProfessionalsListProps {
     dataSource: Professional[];
@@ -34,7 +35,20 @@ export const ProfessionalsList = ({
             title: "Nombre Completo",
             key: "fullName",
             ellipsis: true,
-            render: (_, record) => `${record.name} ${record.lastName || ""}`.trim(),
+            render: (_, record) => (
+                <div style={{display:"flex", gap: "0.5rem", alignItems: "center"}}>
+                    {record.profilePhoto ? (
+                        <Image src={record.profilePhoto} alt="Avatar" width={36} height={36} 
+                            style={{objectFit:"cover", borderRadius: "50%"}}
+                        />
+                    ): (
+                        <Avatar size={36} icon={<UserOutlined />} />
+                    )}
+                    <div>
+                        {`${record.name} ${record.lastName || ""}`.trim()}
+                    </div>
+                </div>
+            )
         },
         {
             title: "Teléfono",
@@ -70,8 +84,7 @@ export const ProfessionalsList = ({
         {
             title: "Acciones",
             key: "actions",
-            width: 120,
-            fixed: "right",
+            width: 80,
             render: (_, record) => (
                 <Space size="small">
                     <EditProfessionalModal

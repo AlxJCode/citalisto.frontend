@@ -1,7 +1,7 @@
 "use client";
 
-import { Table, Button, Space, TableColumnsType, Tag } from "antd";
-import { DeleteOutlined, EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { Table, Button, Space, TableColumnsType, Tag, Image, Avatar } from "antd";
+import { DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, SmileOutlined } from "@ant-design/icons";
 import { Service } from "../../types/service.types";
 import { EditServiceModal } from "../EditServiceModal";
 import { DeleteServiceModal } from "../DeleteServiceModal";
@@ -37,14 +37,31 @@ export const ServicesList = ({
         {
             title: "#",
             key: "index",
-            width: 60,
+            width: 40,
             render: (_, __, index) => (page - 1) * pageSize + index + 1,
         },
         {
             title: "Nombre",
             dataIndex: "name",
             key: "name",
-            ellipsis: true,
+            render: (_,record) => (
+                <div style={{display:"flex", gap: "0.5rem", alignItems: "center"}}>
+                    {record.image ? (
+                        <div style={{width:"32px", height: "32px"}}>
+                            <Image src={record.image} alt="Avatar" width={32} height={32} 
+                                style={{objectFit:"cover", borderRadius: "50%"}}
+                            />
+                        </div>
+                    ): (
+                        <div style={{width:"32px", height: "32px"}}>
+                            <Avatar size={32} icon={<SmileOutlined />} />
+                        </div>
+                    )}
+                    <div>
+                        {`${record.name}`.trim()}
+                    </div>
+                </div>
+            )
         },
         {
             title: "Descripción",
@@ -81,8 +98,7 @@ export const ServicesList = ({
         {
             title: "Acciones",
             key: "actions",
-            width: 120,
-            fixed: "right",
+            width: 100,
             render: (_, record) => (
                 <Space size="small">
                     {record.isActive ?(

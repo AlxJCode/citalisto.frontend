@@ -1,46 +1,46 @@
 /* Tailwind base layers */
 @import "tailwindcss";
 
-/* Reset mínimo recomendado */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Reset mínimo usando layers de Tailwind */
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
 
-/* Fuente global */
-html,
-body {
-    font-family: var(--font-inter, sans-serif);
-    height: 100%;
-    background-color: #ffffff;
-    color: #111111;
-}
+    /* Fuente global */
+    html,
+    body {
+        font-family: var(--font-inter, sans-serif);
+        height: 100%;
+        background-color: #ffffff;
+        color: #111111;
+    }
 
-/* Quita scroll brusco */
-html {
-    scroll-behavior: smooth;
-}
+    /* Quita scroll brusco */
+    html {
+        scroll-behavior: smooth;
+    }
 
-/* Quita estilos feos de botones */
-button {
-    cursor: pointer;
-    background: none;
-    border: none;
-}
+    /* Quita estilos feos de botones */
+    button {
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
 
-/* Imágenes responsivas */
-img,
-picture,
-video {
-    max-width: 100%;
-    display: block;
-}
+    /* Imágenes responsivas */
+    img,
+    picture,
+    video {
+        max-width: 100%;
+        display: block;
+    }
 
-/* Quitar decoraciones de links */
-a {
-    text-decoration: none;
-    color: inherit;
+    /* Quitar decoraciones de links */
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
 }
 
 :root {

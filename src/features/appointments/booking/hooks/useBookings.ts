@@ -7,6 +7,7 @@ import {
     createBookingApi,
     createHistoricalBookingApi,
     deleteBookingApi,
+    getBookingApi,
     getBookingsApi,
     BookingFilters,
     updateBookingApi,
@@ -16,6 +17,7 @@ import { toCamelCase } from "@/lib/utils/case";
 
 export const useBookings = () => {
     const [bookings, setBookings] = useState<Booking[]>([]);
+    const [booking, setBooking] = useState<Booking | null>(null);
     const [loading, setLoading] = useState(false);
     const [count, setCount] = useState(0);
 
@@ -48,6 +50,20 @@ export const useBookings = () => {
         setCount(result.count);
         setLoading(false);
     }, []);
+
+    const fetchBooking = async (id: number | string) => {
+        setLoading(true);
+        const result = await getBookingApi(id);
+
+        if (!result.success) {
+            message.error(`E-${result.status} - ${result.message}`);
+            setLoading(false);
+            return;
+        }
+
+        setBooking(result.data);
+        setLoading(false);
+    };
 
     const createBooking = async (formData: Partial<BookingApi>): Promise<{
         success: boolean;
@@ -100,7 +116,7 @@ export const useBookings = () => {
         };
     };
 
-    const updateBooking = async (id: number, formData: Partial<BookingApi>): Promise<{
+    const updateBooking = async (id: number | string, formData: Partial<BookingApi>): Promise<{
         success: boolean;
         updatedObject?: Booking;
         errorFields?: Record<string, string[]>;
@@ -127,7 +143,7 @@ export const useBookings = () => {
         };
     };
 
-    const deleteBooking = async (id: number) => {
+    const deleteBooking = async (id: number | string) => {
         const result = await deleteBookingApi(id);
 
         if (!result.success) {
@@ -141,9 +157,11 @@ export const useBookings = () => {
 
     return {
         bookings,
+        booking,
         loading,
         count,
         fetchBookings,
+        fetchBooking,
         createBooking,
         createHistoricalBooking,
         updateBooking,

@@ -68,7 +68,7 @@ export const UserAvatar = memo(({
             {
                 key: "profile",
                 icon: <UserOutlined />,
-                label: <Link href={"/settings"}>
+                label: <Link href={"/settings/profile"}>
                     {"Mi perfil"}
                 </Link>,
                 

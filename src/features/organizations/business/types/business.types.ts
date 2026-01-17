@@ -13,6 +13,12 @@ export interface BusinessApi extends BaseModel {
     owner: number;
     whatsapp_monthly_limit: number;
     owner_model?: UserApi | null;
+    enable_email_on_booking: boolean;
+    enable_email_reminder_24h: boolean;
+    enable_email_reminder_2h: boolean;
+    enable_whatsapp_on_booking: boolean;
+    enable_whatsapp_reminder_24h: boolean;
+    enable_whatsapp_reminder_2h: boolean;
 }
 
 export interface Business extends BaseModelCamel {
@@ -26,4 +32,10 @@ export interface Business extends BaseModelCamel {
     owner: number;
     whatsappMonthlyLimit: number;
     ownerModel?: User | null;
+    enableEmailOnBooking: boolean;
+    enableEmailReminder24h: boolean;
+    enableEmailReminder2h: boolean;
+    enableWhatsappOnBooking: boolean;
+    enableWhatsappReminder24h: boolean;
+    enableWhatsappReminder2h: boolean;
 }

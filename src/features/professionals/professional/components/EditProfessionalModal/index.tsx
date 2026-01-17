@@ -31,18 +31,34 @@ export const EditProfessionalModal = ({
         }
     }, [professional, open, form]);
 
+    const initialPhoto = professional?.profilePhoto || undefined;
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         form.resetFields();
         setOpen(false);
     };
 
-    const handleFinish = async (values: Partial<Professional>) => {
+    const handleFinish = async (values: Partial<Professional>, file?: File) => {
         if (!professional?.id) return;
 
         setLoading(true);
 
-        const formData = mapProfessionalToApi(values);
+        const formData = new FormData();
+
+        if (values.name) formData.append("name", values.name);
+        if (values.lastName) formData.append("last_name", values.lastName);
+        if (values.email) formData.append("email", values.email);
+        if (values.phone) formData.append("phone", values.phone);
+        if (values.branch) formData.append("branch", values.branch.toString());
+        if (values.description) formData.append("description", values.description);
+        if (values.services) {
+            values.services.forEach((serviceId) => {
+                formData.append("services", serviceId.toString());
+            });
+        }
+        if (file) formData.append("profile_photo", file);
+
         const result = await updateProfessional(professional.id, formData);
 
         setLoading(false);
@@ -83,6 +99,7 @@ export const EditProfessionalModal = ({
                     loading={loading}
                     onCancel={handleClose}
                     mode="edit"
+                    initialPhoto={initialPhoto}
                 />
             </Modal>
         </>

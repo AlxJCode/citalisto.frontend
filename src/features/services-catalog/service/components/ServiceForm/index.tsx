@@ -1,16 +1,19 @@
 "use client";
 
-import { Form, FormInstance, Input, InputNumber, Button, Space, Row, Col, Divider, Switch, Select } from "antd";
+import { Form, FormInstance, Input, InputNumber, Button, Space, Row, Col, Divider, Switch, Select, Upload, Image, message } from "antd";
+import { PictureOutlined } from "@ant-design/icons";
+import type { UploadFile, RcFile } from "antd/es/upload/interface";
 import { Service } from "../../types/service.types";
 import { useBranches } from "@/features/organizations/branch/hooks/useBranches";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ServiceFormProps {
     form: FormInstance;
-    onFinish: (values: Partial<Service>) => void;
+    onFinish: (values: Partial<Service>, file?: File) => void;
     loading?: boolean;
     onCancel?: () => void;
     mode?: "create" | "edit";
+    initialImage?: string;
 }
 
 export const ServiceForm = ({
@@ -19,18 +22,41 @@ export const ServiceForm = ({
     loading = false,
     onCancel,
     mode = "create",
+    initialImage,
 }: ServiceFormProps) => {
     const { branches, fetchBranches } = useBranches();
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
     useEffect(() => {
         fetchBranches({ is_active: true });
     }, [fetchBranches]);
 
+    const beforeUpload = (file: RcFile) => {
+        const isImage = file.type.startsWith("image/");
+        if (!isImage) {
+            message.error("Solo puedes subir archivos de imagen");
+            return Upload.LIST_IGNORE;
+        }
+
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error("La imagen debe pesar menos de 2MB");
+            return Upload.LIST_IGNORE;
+        }
+
+        return false;
+    };
+
+    const handleFinish = (values: Partial<Service>) => {
+        const file = fileList[0]?.originFileObj;
+        onFinish(values, file);
+    };
+
     return (
         <Form
             form={form}
             layout="vertical"
-            onFinish={onFinish}
+            onFinish={handleFinish}
             disabled={loading}
             style={{ marginTop: 24 }}
         >
@@ -38,6 +64,38 @@ export const ServiceForm = ({
             <Divider titlePlacement="left" style={{ marginTop: 0 }}>
                 Información Básica
             </Divider>
+
+            <Form.Item label="Imagen del servicio (opcional)">
+                <Space align="start" size="middle">
+                    {initialImage && mode === "edit" && (
+                        <Image
+                            src={initialImage}
+                            alt="Imagen actual"
+                            width={100}
+                            height={100}
+                            style={{ objectFit: "cover", borderRadius: 8 }}
+                            preview
+                        />
+                    )}
+                    <Upload
+                        listType="picture-card"
+                        fileList={fileList}
+                        onChange={({ fileList }) => setFileList(fileList)}
+                        beforeUpload={beforeUpload}
+                        maxCount={1}
+                        accept="image/*"
+                    >
+                        {fileList.length === 0 && (
+                            <div>
+                                <PictureOutlined />
+                                <div style={{ marginTop: 8 }}>
+                                    {mode === "edit" ? "Cambiar imagen" : "Subir imagen"}
+                                </div>
+                            </div>
+                        )}
+                    </Upload>
+                </Space>
+            </Form.Item>
 
             <Form.Item
                 label="Nombre del Servicio"

@@ -106,7 +106,7 @@ export interface GetCustomerError {
 export type GetCustomerResult = GetCustomerSuccess | GetCustomerError;
 
 export const getCustomerApi = async (
-    id: number
+    id: number | string
 ): Promise<GetCustomerResult> => {
     const res = await apiRequest<CustomerApi>(() =>
         apiClient.get(`/api/v1/customers/customers/${id}/`)
@@ -187,7 +187,7 @@ export interface UpdateCustomerError {
 export type UpdateCustomerResult = UpdateCustomerSuccess | UpdateCustomerError;
 
 export const updateCustomerApi = async (
-    id: number,
+    id: number | string,
     formData: Partial<CustomerApi>
 ): Promise<UpdateCustomerResult> => {
     const res = await apiRequest<CustomerApi>(() =>
@@ -227,7 +227,7 @@ export interface DeleteCustomerError {
 export type DeleteCustomerResult = DeleteCustomerSuccess | DeleteCustomerError;
 
 export const deleteCustomerApi = async (
-    id: number
+    id: number | string
 ): Promise<DeleteCustomerResult> => {
     const res = await apiRequest<void>(() =>
         apiClient.delete(`/api/v1/customers/customers/${id}/`)

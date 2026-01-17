@@ -83,9 +83,9 @@ export const BookingForm = ({
             disabled={loading}
             style={{ marginTop: 24 }}
         >
-            <Divider titlePlacement="left" style={{ marginTop: 0 }}>
+            {/* <Divider titlePlacement="left" style={{ marginTop: 0 }}>
                 Información de la Cita
-            </Divider>
+            </Divider> */}
 
             <Row gutter={16}>
                 <Col xs={24} md={12}>
@@ -239,14 +239,14 @@ export const BookingForm = ({
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Space orientation="vertical" style={{ width: "100%" }}>
+                    <Space orientation="horizontal" style={{ width: "100%" }}>
                         <Form.Item
                             label="Notificar por WhatsApp"
                             name="notifyByWhatsapp"
                             valuePropName="checked"
                             style={{ marginBottom: 8 }}
                         >
-                            <Switch />
+                            <Switch checkedChildren="Si" unCheckedChildren="No" />
                         </Form.Item>
 
                         <Form.Item
@@ -255,7 +255,7 @@ export const BookingForm = ({
                             valuePropName="checked"
                             style={{ marginBottom: 0 }}
                         >
-                            <Switch />
+                            <Switch checkedChildren="Si" unCheckedChildren="No" />
                         </Form.Item>
                     </Space>
                 </Col>
